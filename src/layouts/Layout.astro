@@ -494,8 +494,8 @@ const siteLang = lang.replace("_", "-");
               mainContentWrapper.style.zIndex = "";
               mainContentWrapper.style.setProperty("margin-top", "0", "important");
             } else if (wallpaperMode === WALLPAPER_BANNER && !isHomePage) {
-              // 桌面端横幅模式非首页：与首页相同定位（保留grid transform），内容不再压住 banner
-              mainContentWrapper.style.setProperty("top", "calc(var(--banner-height) - 0rem)", "important");
+              // 桌面端横幅模式非首页：与首页相同定位（保留grid transform），内容与 banner 底部保留 2.5rem 留白
+              mainContentWrapper.style.setProperty("top", "calc(var(--banner-height) + 2.5rem)", "important");
               mainContentWrapper.style.position = "";
               mainContentWrapper.style.zIndex = "";
               mainContentWrapper.style.setProperty("margin-top", "0", "important");
