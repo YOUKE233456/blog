@@ -1,0 +1,99 @@
+---
+// 首页公告跑马灯（fqzlr.com 同款结构：section.home-ticker > div.home-ticker__inner）
+// 位于内容区最顶部（分类导航之前），滚动可见
+// 数据与开关见 src/config/homeWidgetsConfig.ts 的 marquee
+import { homeWidgetsConfig } from "@/config/homeWidgetsConfig";
+
+const { marquee } = homeWidgetsConfig;
+
+const itemClass = "home-ticker__item";
+const tagClass = "home-ticker__tag";
+const textClass = "home-ticker__text";
+const sepClass = "home-ticker__sep";
+---
+
+{
+	marquee.enable && marquee.items.length > 0 && (
+		<section id="home-ticker" class="home-ticker" aria-label="公告跑马灯">
+			<div class="home-ticker__inner">
+				<div class="home-ticker__track">
+					{marquee.items.map((item) => (
+						<span class={itemClass}>
+							<span class={tagClass}>[{item.tag}]</span>
+							<span class={textClass}>{item.text}</span>
+							<span class={sepClass}>×</span>
+						</span>
+					))}
+				</div>
+				<div class="home-ticker__track" aria-hidden="true">
+					{marquee.items.map((item) => (
+						<span class={itemClass}>
+							<span class={tagClass}>[{item.tag}]</span>
+							<span class={textClass}>{item.text}</span>
+							<span class={sepClass}>×</span>
+						</span>
+					))}
+				</div>
+			</div>
+		</section>
+	)
+}
+
+<style is:global>
+	.home-ticker {
+		width: 100%;
+		overflow: hidden;
+		margin-bottom: 1.5rem;
+	}
+	.home-ticker__inner {
+		display: flex;
+		width: max-content;
+	}
+	.home-ticker__track {
+		display: flex;
+		align-items: center;
+		white-space: nowrap;
+		animation: home-ticker-scroll 30s linear infinite;
+	}
+	.home-ticker__item {
+		display: inline-flex;
+		align-items: center;
+		font-size: 0.875rem;
+		line-height: 1.5rem;
+		color: var(--color-neutral-700);
+	}
+	:root.dark .home-ticker__item {
+		color: var(--color-neutral-300);
+	}
+	.home-ticker__tag {
+		font-weight: 600;
+		color: var(--primary);
+		margin-right: 0.5rem;
+	}
+	.home-ticker__text {
+		margin-right: 0.5rem;
+	}
+	.home-ticker__sep {
+		margin: 0 0.75rem;
+		color: var(--color-neutral-400);
+	}
+	:root.dark .home-ticker__sep {
+		color: var(--color-neutral-500);
+	}
+	.home-ticker:hover .home-ticker__track {
+		animation-play-state: paused;
+	}
+	@keyframes home-ticker-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-100%);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.home-ticker__track {
+			animation: none;
+		}
+	}
+</style>

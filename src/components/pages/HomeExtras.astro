@@ -33,7 +33,7 @@ const days = Math.max(
 	)
 );
 
-const { marquee, abilities, social, skills } = homeWidgetsConfig;
+const { abilities, social, skills } = homeWidgetsConfig;
 
 const sectionLabel = "text-[0.65rem] font-semibold tracking-[0.2em] text-(--primary)/70 mb-1 uppercase";
 const cardTitle = "text-lg font-bold text-neutral-900 dark:text-neutral-100";
@@ -45,33 +45,6 @@ const socialChip =
 {
 	homeWidgetsConfig.enable && (
 		<section class="flex flex-col gap-6" aria-label="首页扩展组件">
-			{
-				marquee.enable && marquee.items.length > 0 && (
-					<div class="overflow-hidden" aria-label="公告跑马灯">
-						<div class="home-marquee flex items-center gap-8">
-							<div class="home-marquee-track flex items-center gap-8 shrink-0">
-								{marquee.items.map((item) => (
-									<span class="flex items-center gap-2 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300">
-										<span class="text-(--primary) font-semibold">[{item.tag}]</span>
-										<span>{item.text}</span>
-										<span class="text-neutral-400 dark:text-neutral-500 mx-2">×</span>
-									</span>
-								))}
-							</div>
-							<div class="home-marquee-track flex items-center gap-8 shrink-0" aria-hidden="true">
-								{marquee.items.map((item) => (
-									<span class="flex items-center gap-2 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300">
-										<span class="text-(--primary) font-semibold">[{item.tag}]</span>
-										<span>{item.text}</span>
-										<span class="text-neutral-400 dark:text-neutral-500 mx-2">×</span>
-									</span>
-								))}
-							</div>
-						</div>
-					</div>
-				)
-			}
-
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 				{/* 站点数据 */}
 				<div class="card-base p-6">
