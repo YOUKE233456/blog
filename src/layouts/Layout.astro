@@ -494,8 +494,8 @@ const siteLang = lang.replace("_", "-");
               mainContentWrapper.style.zIndex = "";
               mainContentWrapper.style.setProperty("margin-top", "0", "important");
             } else if (wallpaperMode === WALLPAPER_BANNER && !isHomePage) {
-              // 桌面端横幅模式非首页：与首页相同定位（保留grid transform）
-              mainContentWrapper.style.setProperty("top", "calc(var(--banner-height) - 3.5rem)", "important");
+              // 桌面端横幅模式非首页：与首页相同定位（保留grid transform），内容不再压住 banner
+              mainContentWrapper.style.setProperty("top", "calc(var(--banner-height) - 0rem)", "important");
               mainContentWrapper.style.position = "";
               mainContentWrapper.style.zIndex = "";
               mainContentWrapper.style.setProperty("margin-top", "0", "important");
@@ -584,6 +584,16 @@ const siteLang = lang.replace("_", "-");
   >
 
     <div id="progress-bar"></div>
+
+    {/* 页面加载时强制回到顶部，避免浏览器恢复上次滚动位置导致首屏看到内容 */}
+    <script is:inline>
+      (function() {
+        if ("scrollRestoration" in history) {
+          history.scrollRestoration = "manual";
+        }
+        window.scrollTo(0, 0);
+      })();
+    </script>
 
     {/* 卡片样式：根据 localStorage 覆盖默认配置 */}
     <script is:inline define:vars={{

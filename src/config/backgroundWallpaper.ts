@@ -105,12 +105,12 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		},
 		// 导航栏配置
 		navbar: {
-			// 导航栏透明模式："semi" 半透明（透明白毛玻璃），"full" 完全透明，"semifull" 动态透明，"none" 无玻璃效果
-			transparentMode: "semi",
+			// 导航栏透明模式："semi" 半透明（透明白毛玻璃），"full" 完全透明（fqzlr.com 同款悬浮效果），"semifull" 动态透明，"none" 无玻璃效果
+			transparentMode: "full",
 			// 毛玻璃模糊度，0 即关闭导航栏的毛玻璃
 			// 注意：导航栏子菜单与浮动面板始终保留毛玻璃，模糊度跟随此项但有最小值
 			blur: 8,
-			// semi 模式的表面不透明度（0-1，越小越透明），0.55 为默认值
+			// semi 模式的表面不透明度（0-1，越小越透明），0.55 为默认值；full 模式不生效
 			opacity: 0.35,
 		},
 		// 水波纹动画效果配置，开启会影响页面性能，请根据自己的喜好开启
