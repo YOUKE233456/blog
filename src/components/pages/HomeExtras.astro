@@ -47,14 +47,12 @@ const socialChip =
 		<section class="flex flex-col gap-6" aria-label="首页扩展组件">
 			{
 				marquee.enable && marquee.items.length > 0 && (
-					<div class="card-base py-3 overflow-hidden" aria-label="公告跑马灯">
+					<div class="overflow-hidden" aria-label="公告跑马灯">
 						<div class="home-marquee flex items-center gap-8">
 							<div class="home-marquee-track flex items-center gap-8 shrink-0">
 								{marquee.items.map((item) => (
 									<span class="flex items-center gap-2 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300">
-										<span class="px-2 py-0.5 rounded-md bg-(--primary)/15 text-(--primary) text-xs font-bold">
-											[{item.tag}]
-										</span>
+										<span class="text-(--primary) font-semibold">[{item.tag}]</span>
 										<span>{item.text}</span>
 										<span class="text-neutral-400 dark:text-neutral-500 mx-2">×</span>
 									</span>
@@ -63,9 +61,7 @@ const socialChip =
 							<div class="home-marquee-track flex items-center gap-8 shrink-0" aria-hidden="true">
 								{marquee.items.map((item) => (
 									<span class="flex items-center gap-2 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300">
-										<span class="px-2 py-0.5 rounded-md bg-(--primary)/15 text-(--primary) text-xs font-bold">
-											[{item.tag}]
-										</span>
+										<span class="text-(--primary) font-semibold">[{item.tag}]</span>
 										<span>{item.text}</span>
 										<span class="text-neutral-400 dark:text-neutral-500 mx-2">×</span>
 									</span>
