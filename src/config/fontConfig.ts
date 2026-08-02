@@ -43,7 +43,8 @@ export const fontsList: FontDefinition[] = [
 		weights: ["400", "500", "700"],
 		styles: ["normal"],
 		subsets: ["latin", "japanese"],
-		fallbacks: ["sans-serif"],
+		// 日文字体对简体中文覆盖不全：缺字时回退到站酷庆科黄油体（二次元风格保持一致）
+		fallbacks: ["ZCOOL QingKe HuangYou", "sans-serif"],
 	},
 	{
 		name: "Zen Maru Gothic",
