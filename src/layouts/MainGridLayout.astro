@@ -11,6 +11,7 @@ import ImageWrapper from "@/components/common/ImageWrapper.astro";
 import FloatingControls from "@/components/controls/FloatingControls.astro";
 import ScrollDownIndicator from "@/components/controls/ScrollDownIndicator.astro";
 import BackgroundPlayer from "@/components/features/BackgroundPlayer.astro";
+import BannerQuote from "@/components/features/BannerQuote.astro";
 import TypewriterText from "@/components/features/TypewriterText.astro";
 import HomeTicker from "@/components/pages/HomeTicker.astro";
 import CategoryBar from "@/components/layout/CategoryBar.astro";
@@ -632,17 +633,11 @@ const hasMultipleImages =
                         </div>
                     )}
                     {backgroundWallpaper.common?.homeText?.subtitle && (
-                        <div id="banner-subtitle" class="banner-subtitle text-white/90 leading-snug" style={{ fontSize: backgroundWallpaper.common.homeText.subtitleSize || "1.5rem" }} data-subtitles={JSON.stringify(backgroundWallpaper.common.homeText.subtitle)}>
-                            {backgroundWallpaper.common.homeText.typewriter?.enable ? (
-                                <TypewriterText
-                                    text={backgroundWallpaper.common.homeText.subtitle}
-                                    speed={backgroundWallpaper.common.homeText.typewriter.speed}
-                                    deleteSpeed={backgroundWallpaper.common.homeText.typewriter.deleteSpeed}
-                                    pauseTime={backgroundWallpaper.common.homeText.typewriter.pauseTime}
-                                />
-                            ) : (
-                                randomSubtitle
-                            )}
+                        <div id="banner-subtitle" class="banner-subtitle text-white/90 leading-snug" style={{ fontSize: backgroundWallpaper.common.homeText.subtitleSize || "1.5rem" }}>
+                            {/* 两行名言打字机：逐字出现 → 停留 → 逐字消失 → 循环 */}
+                            <BannerQuote
+                                lines={Array.isArray(backgroundWallpaper.common.homeText.subtitle) ? backgroundWallpaper.common.homeText.subtitle : [backgroundWallpaper.common.homeText.subtitle]}
+                            />
                         </div>
                     )}
                 </div>

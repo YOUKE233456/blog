@@ -73,17 +73,12 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		homeText: {
 			// 是否启用主页横幅文字
 			enable: true,
-			// 主页横幅主标题
+			// 主页横幅主标题（顶部）
 			title: "隐德来希的博客",
 			// 主页横幅主标题字体大小
 			titleSize: "3.5rem",
-			// 主页横幅副标题
-			subtitle: [
-				"[ 无技术博主 / 正在努力 ]",
-				"[ 保持好奇 / 保持热爱 ]",
-				"[ 记录生活 / 分享折腾 ]",
-				"[ Welcome to my blog! ]",
-			],
+			// 主页横幅副标题（两行名言，逐字出现/消失循环）
+			subtitle: ["唯一不变的是变化本身", "——赫伯特·斯宾塞"],
 			// 主页横幅副标题字体大小
 			subtitleSize: "1.5rem",
 			typewriter: {

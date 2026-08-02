@@ -1,0 +1,88 @@
+---
+// 横幅名言打字机：两行文字逐字出现 → 停留 → 逐字消失 → 循环
+// lines: 每行文字（如 ["唯一不变的是变化本身", "——赫伯特·斯宾塞"]）
+interface Props {
+	lines: string[];
+	class?: string;
+	style?: string;
+}
+const { lines } = Astro.props;
+---
+
+<div class:list={["banner-quote", Astro.props.class]} style={Astro.props.style} aria-label="名言">
+	{lines.map((line) => (
+		<div class="banner-quote__line">{line}</div>
+	))}
+</div>
+
+<style is:global>
+	.banner-quote {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+	}
+	.banner-quote__line {
+		white-space: pre;
+		min-height: 1.4em;
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		const container = document.querySelector(".banner-quote");
+		if (!container) return;
+		const lineEls = Array.from(container.querySelectorAll(".banner-quote__line"));
+		if (lineEls.length === 0) return;
+		const texts = lineEls.map((el) => el.textContent || "");
+
+		const typeSpeed = 90; // 打字速度（毫秒/字）
+		const deleteSpeed = 45; // 删除速度（毫秒/字）
+		const pauseTime = 2200; // 全部显示后的停留时间
+
+		let lineIndex = 0;
+		let charIndex = 0;
+		let deleting = false;
+
+		// 清空所有行后开始
+		lineEls.forEach((el) => (el.textContent = ""));
+
+		function tick() {
+			const el = lineEls[lineIndex];
+			const text = texts[lineIndex];
+
+			if (!deleting) {
+				charIndex++;
+				el.textContent = text.slice(0, charIndex);
+				if (charIndex >= text.length) {
+					if (lineIndex === lineEls.length - 1) {
+						// 所有行已打完：停留后开始逐字删除
+						setTimeout(() => {
+							deleting = true;
+							tick();
+						}, pauseTime);
+						return;
+					}
+					lineIndex++;
+					charIndex = 0;
+				}
+			} else {
+				charIndex--;
+				el.textContent = text.slice(0, charIndex);
+				if (charIndex <= 0) {
+					if (lineIndex === 0) {
+						// 所有行已删完：重新开始
+						deleting = false;
+						charIndex = 0;
+					} else {
+						lineIndex--;
+						charIndex = texts[lineIndex].length;
+					}
+				}
+			}
+			setTimeout(tick, deleting ? deleteSpeed : typeSpeed);
+		}
+
+		setTimeout(tick, 600);
+	})();
+</script>
