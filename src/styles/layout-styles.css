@@ -70,15 +70,15 @@ html.is-page-transitioning .banner-home-text-overlay {
 @media (max-width: 480px) {
     /* Banner wrapper 高度统一 65vh，让主内容区自然覆盖约 10% 横幅 */
     #wallpaper-wrapper:not(.mobile-hide-banner) {
-        height: 65vh !important;
+        height: var(--banner-height-home) !important;
         top: 0 !important;
         transform: none !important;
     }
 
     /* 主内容区域位置调整 - 覆盖横幅约 10% */
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height) - 3.5rem) !important;
-        min-height: calc(100vh - (var(--banner-height) - 3.5rem)) !important;
+        top: var(--banner-height-home) !important;
+        min-height: calc(100vh - var(--banner-height-home)) !important;
     }
 
     /* 横幅文本覆盖层优化 */
@@ -117,15 +117,15 @@ html.is-page-transitioning .banner-home-text-overlay {
 @media (min-width: 481px) and (max-width: 640px) {
     /* Banner wrapper 高度统一 65vh，让主内容区自然覆盖约 10% 横幅 */
     #wallpaper-wrapper:not(.mobile-hide-banner) {
-        height: 65vh !important;
+        height: var(--banner-height-home) !important;
         top: 0 !important;
         transform: none !important;
     }
 
     /* 主内容区域位置调整 - 覆盖横幅约 10% */
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height) - 3.5rem) !important;
-        min-height: calc(100vh - (var(--banner-height) - 3.5rem)) !important;
+        top: var(--banner-height-home) !important;
+        min-height: calc(100vh - var(--banner-height-home)) !important;
     }
 
     /* 横幅文本覆盖层优化 */
@@ -164,15 +164,15 @@ html.is-page-transitioning .banner-home-text-overlay {
 @media (min-width: 641px) and (max-width: 767px) {
     /* Banner wrapper 高度统一 65vh，让主内容区自然覆盖约 10% 横幅 */
     #wallpaper-wrapper:not(.mobile-hide-banner) {
-        height: 65vh !important;
+        height: var(--banner-height-home) !important;
         top: 0 !important;
         transform: none !important;
     }
 
     /* 主内容区域位置调整 - 覆盖横幅约 10% */
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height) - 3.5rem) !important;
-        min-height: calc(100vh - (var(--banner-height) - 3.5rem)) !important;
+        top: var(--banner-height-home) !important;
+        min-height: calc(100vh - var(--banner-height-home)) !important;
     }
 
     /* 横幅文本覆盖层优化 */
@@ -211,15 +211,15 @@ html.is-page-transitioning .banner-home-text-overlay {
 @media (min-width: 768px) and (max-width: 1023px) {
     /* Banner wrapper 高度统一 65vh，让主内容区自然覆盖约 10% 横幅 */
     #wallpaper-wrapper:not(.mobile-hide-banner) {
-        height: 65vh !important;
+        height: var(--banner-height-home) !important;
         top: 0 !important;
         transform: none !important;
     }
 
     /* 主内容区域位置调整 - 与桌面端使用相同的 calc 公式 */
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height) - 3.5rem) !important;
-        min-height: calc(100vh - (var(--banner-height) - 3.5rem)) !important;
+        top: var(--banner-height-home) !important;
+        min-height: calc(100vh - var(--banner-height-home)) !important;
     }
 
     /* 横幅文本覆盖层优化 */
@@ -493,15 +493,15 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
 @media (max-width: 1023px) and (orientation: landscape) {
     #wallpaper-wrapper:not(.mobile-hide-banner) {
         top: 0 !important; /* 横屏模式从顶部开始，避免被导航栏覆盖 */
-        height: 65vh !important;
+        height: var(--banner-height-home) !important;
         transform: none !important; /* 移除桌面端的translateY偏移 */
     }
     
     /* 主内容区域位置调整 - 确保在banner下面，但不影响非首页 */
     /* 仅在 banner 模式下应用，其他模式（全屏壁纸/纯色）使用默认的 5.5rem */
     body.enable-banner .absolute.w-full.z-30:not(.mobile-main-no-banner):not(.no-banner-layout) {
-        top: calc(var(--banner-height) - 3.5rem) !important;
-        min-height: calc(100vh - (var(--banner-height) - 3.5rem)) !important;
+        top: var(--banner-height-home) !important;
+        min-height: calc(100vh - var(--banner-height-home)) !important;
     }
     
     .banner-container {
@@ -550,8 +550,8 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
     }
 
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height) - 3.5rem) !important;
-        min-height: calc(100vh - (var(--banner-height) - 3.5rem)) !important;
+        top: var(--banner-height-home) !important;
+        min-height: calc(100vh - var(--banner-height-home)) !important;
     }
     
     .banner-home-text-overlay {
@@ -582,8 +582,8 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
     }
 
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height) - 3.5rem) !important;
-        min-height: calc(100vh - (var(--banner-height) - 3.5rem)) !important;
+        top: var(--banner-height-home) !important;
+        min-height: calc(100vh - var(--banner-height-home)) !important;
     }
     
     .banner-home-text-overlay {
@@ -609,13 +609,13 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
 /* 中等高度屏幕 (高度 601px - 700px) - 仅移动端 */
 @media (max-width: 1023px) and (min-height: 601px) and (max-height: 700px) {
     #wallpaper-wrapper {
-        height: 75vh !important;
+        height: var(--banner-height-home) !important;
         transform: none !important;
     }
 
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height) - 3.5rem) !important;
-        min-height: calc(100vh - (var(--banner-height) - 3.5rem)) !important;
+        top: var(--banner-height-home) !important;
+        min-height: calc(100vh - var(--banner-height-home)) !important;
     }
 
     .banner-home-text-overlay {
@@ -646,8 +646,8 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
     }
 
     body.enable-banner .absolute.w-full.z-30:not(.mobile-main-no-banner):not(.no-banner-layout) {
-        top: calc(var(--banner-height) - 3.5rem) !important;
-        min-height: calc(100vh - (var(--banner-height) - 3.5rem)) !important;
+        top: var(--banner-height-home) !important;
+        min-height: calc(100vh - var(--banner-height-home)) !important;
     }
     
     .banner-home-text-overlay {
