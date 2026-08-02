@@ -180,8 +180,8 @@ const showBannerPageTitle =
 const mobileNonHomeBannerClass = !isHomePageCheck ? "mobile-hide-banner" : "";
 
 // 计算主内容区域位置，考虑手机端非首页时banner被隐藏
-// 内容区与 banner 底部之间保留 2.5rem 留白，避免内容紧贴壁纸/波浪（视觉上"压"在壁纸上）
-const MAIN_PANEL_BANNER_GAP = 2.5;
+// 内容区与 banner 底部之间保留 4rem 留白，避免内容紧贴壁纸/波浪（视觉上"压"在壁纸上）
+const MAIN_PANEL_BANNER_GAP = 4;
 const mainPanelTop =
 	isBannerMode && isBackgroundEnabled
 		? `calc(${BANNER_HEIGHT}vh + ${MAIN_PANEL_BANNER_GAP}rem)`

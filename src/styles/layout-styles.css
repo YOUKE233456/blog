@@ -77,7 +77,7 @@ html.is-page-transitioning .banner-home-text-overlay {
 
     /* 主内容区域位置调整 - 覆盖横幅约 10% */
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height-home) + 2.5rem) !important;
+        top: calc(var(--banner-height-home) + 4rem) !important;
         min-height: calc(100vh - var(--banner-height-home) - 2.5rem) !important;
     }
 
@@ -124,7 +124,7 @@ html.is-page-transitioning .banner-home-text-overlay {
 
     /* 主内容区域位置调整 - 覆盖横幅约 10% */
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height-home) + 2.5rem) !important;
+        top: calc(var(--banner-height-home) + 4rem) !important;
         min-height: calc(100vh - var(--banner-height-home) - 2.5rem) !important;
     }
 
@@ -171,7 +171,7 @@ html.is-page-transitioning .banner-home-text-overlay {
 
     /* 主内容区域位置调整 - 覆盖横幅约 10% */
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height-home) + 2.5rem) !important;
+        top: calc(var(--banner-height-home) + 4rem) !important;
         min-height: calc(100vh - var(--banner-height-home) - 2.5rem) !important;
     }
 
@@ -218,7 +218,7 @@ html.is-page-transitioning .banner-home-text-overlay {
 
     /* 主内容区域位置调整 - 与桌面端使用相同的 calc 公式 */
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height-home) + 2.5rem) !important;
+        top: calc(var(--banner-height-home) + 4rem) !important;
         min-height: calc(100vh - var(--banner-height-home) - 2.5rem) !important;
     }
 
@@ -500,7 +500,7 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
     /* 主内容区域位置调整 - 确保在banner下面，但不影响非首页 */
     /* 仅在 banner 模式下应用，其他模式（全屏壁纸/纯色）使用默认的 5.5rem */
     body.enable-banner .absolute.w-full.z-30:not(.mobile-main-no-banner):not(.no-banner-layout) {
-        top: calc(var(--banner-height-home) + 2.5rem) !important;
+        top: calc(var(--banner-height-home) + 4rem) !important;
         min-height: calc(100vh - var(--banner-height-home) - 2.5rem) !important;
     }
     
@@ -550,7 +550,7 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
     }
 
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height-home) + 2.5rem) !important;
+        top: calc(var(--banner-height-home) + 4rem) !important;
         min-height: calc(100vh - var(--banner-height-home) - 2.5rem) !important;
     }
     
@@ -582,7 +582,7 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
     }
 
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height-home) + 2.5rem) !important;
+        top: calc(var(--banner-height-home) + 4rem) !important;
         min-height: calc(100vh - var(--banner-height-home) - 2.5rem) !important;
     }
     
@@ -614,7 +614,7 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
     }
 
     body.enable-banner .absolute.w-full.z-30:not(.no-banner-layout):not(.mobile-main-no-banner) {
-        top: calc(var(--banner-height-home) + 2.5rem) !important;
+        top: calc(var(--banner-height-home) + 4rem) !important;
         min-height: calc(100vh - var(--banner-height-home) - 2.5rem) !important;
     }
 
@@ -646,7 +646,7 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
     }
 
     body.enable-banner .absolute.w-full.z-30:not(.mobile-main-no-banner):not(.no-banner-layout) {
-        top: calc(var(--banner-height-home) + 2.5rem) !important;
+        top: calc(var(--banner-height-home) + 4rem) !important;
         min-height: calc(100vh - var(--banner-height-home) - 2.5rem) !important;
     }
     

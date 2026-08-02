@@ -64,7 +64,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 是否启用该组件
 			enable: true,
 			// 组件位置
-			position: "sticky",
+			position: "top",
 			// 是否在文章详情页显示
 			showOnPostPage: true,
 		},
@@ -74,7 +74,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 是否启用该组件
 			enable: true,
 			// 组件位置
-			position: "sticky",
+			position: "top",
 			// 是否在文章详情页显示
 			showOnPostPage: true,
 			// 组件专属配置
@@ -89,7 +89,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 是否启用该组件
 			enable: true,
 			// 组件位置
-			position: "sticky",
+			position: "top",
 			// 是否在文章详情页显示
 			showOnPostPage: true,
 			// 组件专属配置
@@ -154,7 +154,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 是否显示组件标题
 			showTitle: false,
 			// 组件位置
-			position: "sticky",
+			position: "top",
 			// 是否在文章详情页显示
 			showOnPostPage: false,
 			// 组件专属配置
@@ -171,7 +171,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 是否启用该组件
 			enable: true,
 			// 组件位置
-			position: "sticky",
+			position: "top",
 			// 是否在文章详情页显示
 			showOnPostPage: true,
 			// 是否在非文章详情页隐藏
@@ -185,7 +185,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 是否显示组件标题
 			showTitle: false,
 			// 组件位置
-			position: "sticky",
+			position: "top",
 			// 是否在文章详情页显示
 			showOnPostPage: true,
 			// 组件专属配置（广告内容直接在此配置）
@@ -214,7 +214,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			// 是否启用该组件
 			enable: false,
 			// 组件位置
-			position: "sticky",
+			position: "top",
 			// 是否在文章详情页显示
 			showOnPostPage: true,
 			// 组件专属配置（广告内容直接在此配置）
