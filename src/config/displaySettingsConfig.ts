@@ -31,8 +31,8 @@ export const displaySettingsConfig: DisplaySettingsConfig = {
 	// 渐变过渡效果开关
 	gradientSwitchable: true,
 
-	// 横幅标题显示开关
-	bannerTitleSwitchable: true,
+	// 横幅标题显示开关（关闭：强制显示壁纸文字，忽略 localStorage 中的旧设置）
+	bannerTitleSwitchable: false,
 
 	// 壁纸轮播开关
 	bannerCarouselSwitchable: true,

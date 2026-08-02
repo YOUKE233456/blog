@@ -544,9 +544,10 @@ const siteLang = lang.replace("_", "-");
       })();
 
       // 初始化横幅标题显示状态 - 在 html 元素上设置属性，CSS 会立即生效
+      // 仅当配置允许切换时才读取 localStorage，否则强制显示（忽略旧设置）
       (function applyBannerTitleEnabled() {
         const bannerTitleEnabled = localStorage.getItem("bannerTitleEnabled");
-        if (bannerTitleEnabled !== null) {
+        if (bannerTitleEnabled !== null && displaySettingsConfig.bannerTitleSwitchable) {
           document.documentElement.setAttribute("data-banner-title-enabled", bannerTitleEnabled);
         }
       })();
