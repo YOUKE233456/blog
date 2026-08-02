@@ -22,8 +22,8 @@ export const displaySettingsConfig: DisplaySettingsConfig = {
 
 	// ── 壁纸 (Wallpaper) ──────────────────────────────────
 
-	// 壁纸模式切换开关
-	wallpaperModeSwitchable: true,
+	// 壁纸模式切换开关（关闭：固定为配置的模式，永远显示动态壁纸）
+	wallpaperModeSwitchable: false,
 
 	// 水波纹动画开关
 	wavesSwitchable: true,

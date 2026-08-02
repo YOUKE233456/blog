@@ -77,8 +77,8 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 			title: "隐德来希的博客",
 			// 主页横幅主标题字体大小
 			titleSize: "3.5rem",
-			// 主页横幅副标题（两行名言，逐字出现/消失循环）
-			subtitle: ["唯一不变的是变化本身", "——赫伯特·斯宾塞"],
+			// 主页横幅副标题（名言，逐字出现/消失循环）
+			subtitle: ["唯一不变的是变化本身"],
 			// 主页横幅副标题字体大小
 			subtitleSize: "1.5rem",
 			typewriter: {

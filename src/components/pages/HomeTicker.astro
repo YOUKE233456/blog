@@ -15,10 +15,18 @@ const textClass = "home-ticker__text";
 
 {
 	marquee.enable && marquee.items.length > 0 && (
-		<section id="home-ticker" class="home-ticker" aria-label="公告跑马灯">
+		<section
+			id="home-ticker"
+			class="home-ticker"
+			aria-label="公告跑马灯"
+			style={`--ticker-count: ${marquee.items.length};`}
+		>
 			<div class="home-ticker__inner">
-				{marquee.items.map((item) => (
-					<div class={itemClass}>
+				{marquee.items.map((item, index) => (
+					<div
+						class={itemClass}
+						style={`--ticker-index: ${index};`}
+					>
 						<span class={tagClass}>[{item.tag}]</span>
 						<span class={textClass}>{item.text}</span>
 					</div>
@@ -60,7 +68,9 @@ const textClass = "home-ticker__text";
 		line-height: 1.5rem;
 		color: var(--color-neutral-700);
 		opacity: 0;
-		animation: home-ticker-cycle 4s ease-in-out infinite;
+		/* 总周期 = 条数 × 4s；每条在自己的时间窗内显示（滑入 → 停留 → 滑出） */
+		animation: home-ticker-cycle calc(var(--ticker-count, 1) * 4s) ease-in-out infinite;
+		animation-delay: calc(var(--ticker-index, 0) * 4s);
 	}
 	:root.dark .home-ticker__item {
 		color: var(--color-neutral-300);
@@ -68,25 +78,6 @@ const textClass = "home-ticker__text";
 	.home-ticker__tag {
 		font-weight: 600;
 		color: var(--primary);
-	}
-	/* 每条公告错开显示（周期 = 条数 × 4s） */
-	.home-ticker__item:nth-child(1) {
-		animation-delay: 0s;
-	}
-	.home-ticker__item:nth-child(2) {
-		animation-delay: 4s;
-	}
-	.home-ticker__item:nth-child(3) {
-		animation-delay: 8s;
-	}
-	.home-ticker__item:nth-child(4) {
-		animation-delay: 12s;
-	}
-	.home-ticker__item:nth-child(5) {
-		animation-delay: 16s;
-	}
-	.home-ticker__item:nth-child(6) {
-		animation-delay: 20s;
 	}
 	@keyframes home-ticker-cycle {
 		0% {
