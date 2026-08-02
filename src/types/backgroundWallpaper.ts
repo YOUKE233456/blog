@@ -33,6 +33,7 @@ export type BackgroundWallpaperConfig = {
 		navbar?: {
 			transparentMode?: "semi" | "full" | "semifull"; // 导航栏透明模式
 			blur?: number; // 毛玻璃模糊度，0 即关闭导航栏毛玻璃
+			opacity?: number; // semi 模式表面不透明度（0-1，越小越透明），默认 0.55
 		};
 		waves?: {
 			enable:

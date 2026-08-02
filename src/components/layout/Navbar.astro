@@ -37,6 +37,10 @@ const navbarBlur =
 		? (backgroundWallpaper.common?.navbar?.blur ?? 20)
 		: 0;
 
+// 获取导航栏表面不透明度（semi 模式透明白的浓度，0-1，越小越透明）
+const navbarSurfaceOpacity =
+	backgroundWallpaper.common?.navbar?.opacity ?? 0.35;
+
 // 获取导航栏标题，如果没有设置则使用 siteConfig.title
 const navbarTitle = siteConfig.navbar.title || siteConfig.title;
 
@@ -134,7 +138,7 @@ const logoVariants = await Promise.all(
 		})),
 );
 ---
-<div id="navbar" class="z-50" style={`--navbar-glass-blur: ${navbarBlur}px;`} data-transparent-mode={navbarTransparentMode} data-is-home={isHomePageCheck} data-full-width={navbarWidthFull}>
+<div id="navbar" class="z-50" style={`--navbar-glass-blur: ${navbarBlur}px; --navbar-surface-opacity: ${navbarSurfaceOpacity};`} data-transparent-mode={navbarTransparentMode} data-is-home={isHomePageCheck} data-full-width={navbarWidthFull}>
     <div class:list={[
         className,
         "overflow-visible! h-12 px-3"
