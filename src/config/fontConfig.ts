@@ -28,6 +28,24 @@ import type { FontDefinition, FontSelectionConfig } from "@/types/fontConfig";
 // 本地开发调试的情况下，修改后需要每次重启开发服务器才能生效
 export const fontsList: FontDefinition[] = [
 	{
+		name: "ZCOOL QingKe HuangYou",
+		cssVariable: "--font-zcool-qingke-huangyou",
+		provider: "fontsource",
+		weights: ["400"],
+		styles: ["normal"],
+		subsets: ["chinese-simplified", "latin"],
+		fallbacks: ["sans-serif"],
+	},
+	{
+		name: "M PLUS Rounded 1c",
+		cssVariable: "--font-m-plus-rounded-1c",
+		provider: "fontsource",
+		weights: ["400", "500", "700"],
+		styles: ["normal"],
+		subsets: ["latin", "japanese"],
+		fallbacks: ["sans-serif"],
+	},
+	{
 		name: "Zen Maru Gothic",
 		cssVariable: "--font-zen-maru-gothic",
 		provider: "fontsource",
@@ -89,16 +107,17 @@ export const fontConfig: FontSelectionConfig = {
 	enable: true,
 	// 当前选择的字体 CSS 变量名（对应上方 fonts 中的 cssVariable）
 	// 使用 "system" 表示系统字体（不加载任何自定义字体）
-	selected: ["system"],
+	// 正文：站酷庆科黄油体（二次元可爱感，简体中文全覆盖）
+	selected: ["--font-zcool-qingke-huangyou"],
 
 	// 各区域独立字体设置（填写上方 fonts 中的 cssVariable，留空则使用全局 selected 字体）
 	// 例如：bannerTitleFont: "--font-inter", 表示主页横幅主标题使用 Inter 字体
-	// 主页横幅主标题字体
-	bannerTitleFont: "--font-zen-maru-gothic",
+	// 主页横幅主标题字体（日漫圆体，动画风）
+	bannerTitleFont: "--font-m-plus-rounded-1c",
 	// 主页横幅副标题字体
-	bannerSubtitleFont: "--font-inter",
+	bannerSubtitleFont: "--font-m-plus-rounded-1c",
 	// 导航栏标题字体
-	navbarTitleFont: "",
+	navbarTitleFont: "--font-m-plus-rounded-1c",
 	// 代码块字体（用于代码高亮和等宽字体场景）
 	codeFont: "--font-jetbrains-mono",
 
