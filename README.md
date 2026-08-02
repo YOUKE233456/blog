@@ -50,6 +50,7 @@ pnpm new-post    # 生成文章模板
 | `sponsorConfig.ts` | 打赏（二维码图片放 `public/assets/images/sponsor/`） |
 | `musicConfig.ts` | 音乐播放器（Meting 歌单 ID） |
 | `pioConfig.ts` | 看板娘开关 |
+| `homeWidgetsConfig.ts` | 首页扩展组件（公告跑马灯/能力矩阵/社交联系/技能图标） |
 
 **上线前必改**（当前为占位/演示值）：
 

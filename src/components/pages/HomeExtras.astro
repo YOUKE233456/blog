@@ -1,0 +1,222 @@
+---
+// 首页扩展组件：公告跑马灯 + 数据卡片区（站点数据/能力矩阵/社交联系/技能图标）
+// 设计参考：fqzlr.com 首页布局；数据与开关见 src/config/homeWidgetsConfig.ts
+import { Icon } from "astro-icon/components";
+import { homeWidgetsConfig } from "@/config/homeWidgetsConfig";
+import { siteConfig } from "@/config";
+import { getCategoryList, getSortedPosts, getTagList } from "@/utils/content-utils";
+
+// 站点数据：文章/分类/标签/字数
+const posts = await getSortedPosts();
+const categories = await getCategoryList();
+const tags = await getTagList();
+
+let totalWords = 0;
+for (const post of posts) {
+	if (post.body) {
+		let text = post.body
+			.replace(/```[\s\S]*?```/g, "")
+			.replace(/`[^`]*`/g, "")
+			.replace(/\s+/g, " ")
+			.trim();
+		const chineseChars = text.match(/[\u4e00-\u9fa5]/g) || [];
+		const englishChars = text.match(/[a-zA-Z]/g) || [];
+		totalWords += chineseChars.length + englishChars.length;
+	}
+}
+
+// 站点运行天数
+const days = Math.max(
+	1,
+	Math.floor(
+		(Date.now() - new Date(siteConfig.siteStartDate).getTime()) / 86400000
+	)
+);
+
+const { marquee, abilities, social, skills } = homeWidgetsConfig;
+
+const sectionLabel = "text-[0.65rem] font-semibold tracking-[0.2em] text-(--primary)/70 mb-1 uppercase";
+const cardTitle = "text-lg font-bold text-neutral-900 dark:text-neutral-100";
+const cardDesc = "text-sm text-neutral-500 dark:text-neutral-400 mt-1 mb-4";
+const socialChip =
+	"flex items-center gap-2 px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-(--primary)/15 transition-colors whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300";
+---
+
+{
+	homeWidgetsConfig.enable && (
+		<section class="flex flex-col gap-6" aria-label="首页扩展组件">
+			{
+				marquee.enable && marquee.items.length > 0 && (
+					<div class="card-base py-3 overflow-hidden" aria-label="公告跑马灯">
+						<div class="home-marquee flex items-center gap-8">
+							<div class="home-marquee-track flex items-center gap-8 shrink-0">
+								{marquee.items.map((item) => (
+									<span class="flex items-center gap-2 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300">
+										<span class="px-2 py-0.5 rounded-md bg-(--primary)/15 text-(--primary) text-xs font-bold">
+											[{item.tag}]
+										</span>
+										<span>{item.text}</span>
+										<span class="text-neutral-400 dark:text-neutral-500 mx-2">×</span>
+									</span>
+								))}
+							</div>
+							<div class="home-marquee-track flex items-center gap-8 shrink-0" aria-hidden="true">
+								{marquee.items.map((item) => (
+									<span class="flex items-center gap-2 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300">
+										<span class="px-2 py-0.5 rounded-md bg-(--primary)/15 text-(--primary) text-xs font-bold">
+											[{item.tag}]
+										</span>
+										<span>{item.text}</span>
+										<span class="text-neutral-400 dark:text-neutral-500 mx-2">×</span>
+									</span>
+								))}
+							</div>
+						</div>
+					</div>
+				)
+			}
+
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+				{/* 站点数据 */}
+				<div class="card-base p-6">
+					<p class={sectionLabel}>CONTEXT</p>
+					<h3 class={cardTitle}>站点数据</h3>
+					<p class={cardDesc}>已运行 {days} 天，沉淀的每一段文字都算数。</p>
+					<div class="grid grid-cols-4 gap-3 text-center">
+						{[
+							{ label: "文章", value: posts.length },
+							{ label: "分类", value: categories.length },
+							{ label: "标签", value: tags.length },
+							{ label: "字数", value: totalWords.toLocaleString() },
+						].map((s) => (
+							<div class="rounded-xl bg-black/5 dark:bg-white/5 py-3">
+								<div class="text-xl font-bold text-(--primary)">{s.value}</div>
+								<div class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+									{s.label}
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+
+				{/* 能力矩阵 */}
+				{
+					abilities.enable && (
+						<div class="card-base p-6">
+							<p class={sectionLabel}>ABILITIES</p>
+							<h3 class={cardTitle}>{abilities.title}</h3>
+							<p class={cardDesc}>{abilities.description}</p>
+							<div class="grid grid-cols-1 gap-3">
+								{abilities.items.map((a) => (
+									<div class="flex items-center gap-3">
+										{a.icon && (
+											<Icon is:inline name={a.icon} class="text-xl text-(--primary) shrink-0" />
+										)}
+										<span class="w-20 text-sm text-neutral-700 dark:text-neutral-300 shrink-0">
+											{a.name}
+										</span>
+										<div class="flex-1 h-2 rounded-full bg-black/5 dark:bg-white/10 overflow-hidden">
+											<div
+												class="h-full rounded-full bg-(--primary)"
+												style={`width: ${a.level}%`}
+											></div>
+										</div>
+										<span class="w-9 text-right text-xs text-neutral-500 dark:text-neutral-400 shrink-0">
+											{a.level}%
+										</span>
+									</div>
+								))}
+							</div>
+						</div>
+					)
+				}
+
+				{/* 社交联系 */}
+				{
+					social.enable && (
+						<div class="card-base p-6 overflow-hidden">
+							<p class={sectionLabel}>CONTACT</p>
+							<h3 class={cardTitle}>{social.title}</h3>
+							<p class={cardDesc}>{social.description}</p>
+							<div class="home-marquee">
+								<div class="home-marquee-track flex items-center gap-6 shrink-0">
+									{social.items.map((s) => (
+										<a href={s.url || "#"} class={socialChip}>
+											<Icon is:inline name={s.icon} class="text-lg text-(--primary)" />
+											<span>{s.name}</span>
+										</a>
+									))}
+								</div>
+								<div class="home-marquee-track flex items-center gap-6 shrink-0" aria-hidden="true">
+									{social.items.map((s) => (
+										<a href={s.url || "#"} class={socialChip}>
+											<Icon is:inline name={s.icon} class="text-lg text-(--primary)" />
+											<span>{s.name}</span>
+										</a>
+									))}
+								</div>
+							</div>
+						</div>
+					)
+				}
+
+				{/* 技能图标 */}
+				{
+					skills.enable && (
+						<div class="card-base p-6 overflow-hidden">
+							<p class={sectionLabel}>SKILLS</p>
+							<h3 class={cardTitle}>{skills.title}</h3>
+							<p class={cardDesc}>{skills.description}</p>
+							<div class="home-marquee">
+								<div class="home-marquee-track flex items-center gap-5 shrink-0">
+									{skills.items.map((s) => (
+										<div class="flex flex-col items-center gap-1.5 min-w-16" title={s.name}>
+											<Icon is:inline name={s.icon} class="text-2xl text-neutral-600 dark:text-neutral-300" />
+											<span class="text-[0.65rem] text-neutral-500 dark:text-neutral-400">
+												{s.name}
+											</span>
+										</div>
+									))}
+								</div>
+								<div class="home-marquee-track flex items-center gap-5 shrink-0" aria-hidden="true">
+									{skills.items.map((s) => (
+										<div class="flex flex-col items-center gap-1.5 min-w-16" title={s.name}>
+											<Icon is:inline name={s.icon} class="text-2xl text-neutral-600 dark:text-neutral-300" />
+											<span class="text-[0.65rem] text-neutral-500 dark:text-neutral-400">
+												{s.name}
+											</span>
+										</div>
+									))}
+								</div>
+							</div>
+						</div>
+					)
+				}
+			</div>
+		</section>
+	)
+}
+
+<style is:global>
+	.home-marquee {
+		display: flex;
+		width: max-content;
+		animation: home-marquee-scroll 25s linear infinite;
+	}
+	.home-marquee:hover {
+		animation-play-state: paused;
+	}
+	@keyframes home-marquee-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.home-marquee {
+			animation: none;
+		}
+	}
+</style>
