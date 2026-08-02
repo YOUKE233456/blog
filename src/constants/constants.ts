@@ -12,8 +12,11 @@ export const WALLPAPER_BANNER = "banner",
 	WALLPAPER_NONE = "none";
 
 // Banner height unit: vh
+// 普通页面 banner 高度
 export const BANNER_HEIGHT = 35;
-export const BANNER_HEIGHT_EXTEND = 30;
+// 首页在普通高度基础上额外增加的高度（与 BANNER_HEIGHT 相加 = 首页总高度）
+// 当前配置使首页 banner 占满整个视口（100vh），与 fqzlr.com 效果一致
+export const BANNER_HEIGHT_EXTEND = 65;
 export const BANNER_HEIGHT_HOME: number = BANNER_HEIGHT + BANNER_HEIGHT_EXTEND;
 
 // The height the main panel overlaps the banner, unit: rem
