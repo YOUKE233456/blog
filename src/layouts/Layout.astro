@@ -1036,7 +1036,7 @@ function disableAnimation() {
 
       // 桌面端横幅模式：统一用banner高度定位，不改变grid transform
       if (!isMobileForBanner && currentMode === "banner" && mainEl) {
-        mainEl.style.setProperty("top", "calc(var(--banner-height) - 3.5rem)", "important");
+        mainEl.style.setProperty("top", "calc(var(--banner-height) + 4rem)", "important");
         mainEl.style.position = "";
         mainEl.style.zIndex = "";
         mainEl.style.setProperty("margin-top", "0", "important");
@@ -1193,7 +1193,7 @@ function disableAnimation() {
               mainContentWrapper.style.zIndex = "";
               mainContentWrapper.style.setProperty("margin-top", "0", "important");
             } else {
-              mainContentWrapper.style.setProperty("top", "calc(var(--banner-height) - 3.5rem)", "important");
+              mainContentWrapper.style.setProperty("top", "calc(var(--banner-height) + 4rem)", "important");
               mainContentWrapper.style.position = "";
               mainContentWrapper.style.zIndex = "";
               mainContentWrapper.style.setProperty("margin-top", "0", "important");
@@ -1225,7 +1225,7 @@ function disableAnimation() {
           }
           // 桌面端横幅模式：统一用banner高度定位，不改变grid transform
           if (visitDesktopMode === "banner") {
-            mainContentWrapper.style.setProperty("top", "calc(var(--banner-height) - 3.5rem)", "important");
+            mainContentWrapper.style.setProperty("top", "calc(var(--banner-height) + 4rem)", "important");
             mainContentWrapper.style.position = "";
             mainContentWrapper.style.zIndex = "";
             mainContentWrapper.style.setProperty("margin-top", "0", "important");
@@ -1317,7 +1317,7 @@ function disableAnimation() {
 
       // 桌面端横幅模式：统一用banner高度定位，不改变grid transform
       if (!isMobileForBanner && currentMode === "banner" && mainEl) {
-        mainEl.style.setProperty("top", "calc(var(--banner-height) - 3.5rem)", "important");
+        mainEl.style.setProperty("top", "calc(var(--banner-height) + 4rem)", "important");
         mainEl.style.position = "";
         mainEl.style.zIndex = "";
         mainEl.style.setProperty("margin-top", "0", "important");
