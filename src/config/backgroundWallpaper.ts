@@ -74,7 +74,7 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 			// 是否启用主页横幅文字
 			enable: true,
 			// 主页横幅主标题
-			title: "384322 的博客",
+			title: "隐德来希的博客",
 			// 主页横幅主标题字体大小
 			titleSize: "3.5rem",
 			// 主页横幅副标题

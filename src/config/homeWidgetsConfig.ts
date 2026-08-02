@@ -10,7 +10,7 @@ export const homeWidgetsConfig: HomeWidgetsConfig = {
 		enable: true,
 		// 每条公告：tag 为标签（如 欢迎/公告/更新），text 为内容
 		items: [
-			{ tag: "欢迎", text: "欢迎来到 384322 的博客！" },
+			{ tag: "欢迎", text: "欢迎来到 隐德来希 的博客！" },
 			{ tag: "公告", text: "本站正在装修中，更多内容陆续上线～" },
 			{ tag: "更新", text: "最近更新：博客搭建记录" },
 			{ tag: "提示", text: "按 Ctrl + K 打开站内全文搜索" },

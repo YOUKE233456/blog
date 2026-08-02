@@ -1,4 +1,4 @@
-# 384322 的博客
+# 隐德来希的博客
 
 > 基于 [Astro](https://astro.build) + [Firefly（流萤）](https://github.com/CuteLeaf/Firefly) 主题的个人博客，托管于 Cloudflare Pages，纯静态、零服务器。
 
