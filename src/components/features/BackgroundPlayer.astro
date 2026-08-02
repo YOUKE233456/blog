@@ -235,10 +235,9 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 <style>
 	:global([data-bg-video-playing] #banner-images-container),
 	:global([data-bg-video-playing] #banner-dim-container),
-	:global([data-bg-video-playing] #banner-overlay-container),
 	:global([data-bg-video-playing] #wallpaper-gradient) {
 		opacity: 0 !important;
 		transition: opacity 0.5s ease;
 	}
-	/* 自定义：视频播放时保留底部白色波浪效果（已从隐藏列表中移除 #header-waves） */
+	/* 自定义：视频播放时保留横幅文字（标题/名言）与底部白色波浪效果（已从隐藏列表中移除 #banner-overlay-container 和 #header-waves） */
 </style>

@@ -1,7 +1,7 @@
 ---
 // 首页公告跑马灯（fqzlr.com 同款结构：section.home-ticker > div.home-ticker__inner）
 // 位于内容区最顶部（分类导航之前）
-// 每条公告依次显示：滑入 → 停留 → 滑出 → 下一条（纯 CSS 轮换）
+// 每条公告依次显示：滑入 → 停留 → 下一条（JS 轮换，可靠）
 // 上下边框跟随主题色相
 // 数据与开关见 src/config/homeWidgetsConfig.ts 的 marquee
 import { homeWidgetsConfig } from "@/config/homeWidgetsConfig";
@@ -15,18 +15,10 @@ const textClass = "home-ticker__text";
 
 {
 	marquee.enable && marquee.items.length > 0 && (
-		<section
-			id="home-ticker"
-			class="home-ticker"
-			aria-label="公告跑马灯"
-			style={`--ticker-count: ${marquee.items.length};`}
-		>
+		<section id="home-ticker" class="home-ticker" aria-label="公告跑马灯">
 			<div class="home-ticker__inner">
-				{marquee.items.map((item, index) => (
-					<div
-						class={itemClass}
-						style={`--ticker-index: ${index};`}
-					>
+				{marquee.items.map((item) => (
+					<div class={itemClass}>
 						<span class={tagClass}>[{item.tag}]</span>
 						<span class={textClass}>{item.text}</span>
 					</div>
@@ -60,17 +52,13 @@ const textClass = "home-ticker__text";
 	.home-ticker__item {
 		position: absolute;
 		inset: 0;
-		display: flex;
+		display: none;
 		align-items: center;
 		gap: 0.5rem;
 		white-space: nowrap;
 		font-size: 0.9rem;
 		line-height: 1.5rem;
 		color: var(--color-neutral-700);
-		opacity: 0;
-		/* 总周期 = 条数 × 4s；每条在自己的时间窗内显示（滑入 → 停留 → 滑出） */
-		animation: home-ticker-cycle calc(var(--ticker-count, 1) * 4s) ease-in-out infinite;
-		animation-delay: calc(var(--ticker-index, 0) * 4s);
 	}
 	:root.dark .home-ticker__item {
 		color: var(--color-neutral-300);
@@ -79,29 +67,47 @@ const textClass = "home-ticker__text";
 		font-weight: 600;
 		color: var(--primary);
 	}
-	@keyframes home-ticker-cycle {
-		0% {
+	/* 当前显示的公告：滑入动画 */
+	.home-ticker__item--active {
+		display: flex;
+		animation: home-ticker-in 0.5s ease;
+	}
+	@keyframes home-ticker-in {
+		from {
 			opacity: 0;
 			transform: translateX(1.5rem);
 		}
-		5% {
+		to {
 			opacity: 1;
 			transform: translateX(0);
 		}
-		85% {
-			opacity: 1;
-			transform: translateX(0);
-		}
-		95% {
-			opacity: 0;
-			transform: translateX(-1.5rem);
-		}
-		100% {
-			opacity: 0;
-			transform: translateX(-1.5rem);
-		}
-	}
-	.home-ticker:hover .home-ticker__item {
-		animation-play-state: paused;
 	}
 </style>
+
+<script is:inline>
+	(() => {
+		const container = document.querySelector("#home-ticker");
+		if (!container) return;
+		const items = Array.from(container.querySelectorAll(".home-ticker__item"));
+		if (items.length === 0) return;
+		if (items.length === 1) {
+			items[0].classList.add("home-ticker__item--active");
+			return;
+		}
+
+		let current = 0;
+		const INTERVAL = 4000; // 每条显示时长（毫秒）
+
+		function show(index) {
+			items.forEach((el, i) => {
+				el.classList.toggle("home-ticker__item--active", i === index);
+			});
+		}
+
+		show(0);
+		setInterval(() => {
+			current = (current + 1) % items.length;
+			show(current);
+		}, INTERVAL);
+	})();
+</script>
