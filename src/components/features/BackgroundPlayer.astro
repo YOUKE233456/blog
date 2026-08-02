@@ -86,6 +86,7 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		if (!isMultiple) video.loop = true;
 
 		var isPlaying = false;
+		var userStarted = false; // 是否由用户手动启动（用于决定能否取消静音）
 		var currentIndex = 0;
 		var errorCount = 0;
 		var toastTimer = null;
@@ -127,7 +128,9 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 			video.src = urlList[currentIndex];
 			video.muted = true;
 			video.play()
-				.then(function () { setTimeout(function () { if (video) video.muted = false; }, 100); })
+				// 仅用户手动点击播放按钮（已有交互手势）时才取消静音；
+				// 自动播放必须保持静音，否则会被浏览器自动播放策略暂停
+				.then(function () { setTimeout(function () { if (video && userStarted) video.muted = false; }, 100); })
 				.catch(function () { isPlaying = false; syncAttr(); });
 		}
 
@@ -143,6 +146,8 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		}
 
 		function toggle() {
+			// 用户手动操作视为已交互，允许取消静音
+			userStarted = true;
 			isPlaying = !isPlaying;
 			if (isPlaying) {
 				if (currentIndex >= urlList.length) currentIndex = 0;
