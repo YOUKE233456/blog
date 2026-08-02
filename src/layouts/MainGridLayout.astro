@@ -338,7 +338,8 @@ const hasMultipleImages =
 <!-- Wallpaper - 如果允许切换则始终渲染，否则只渲染当前模式 -->
 {(isWallpaperSwitchable || isBannerMode || isFullscreenMode || isOverlayMode) && (
 <div id="wallpaper-wrapper" class:list={[
-	`absolute z-10 w-full transition duration-700 overflow-hidden ${mobileNonHomeBannerClass}`,
+	// fullscreen 模式壁纸占文档流（内容在其下方滚动）；其余模式 absolute 定位
+	`${isFullscreenMode && !isWallpaperSwitchable ? 'relative' : 'absolute'} z-10 w-full transition duration-700 overflow-hidden ${mobileNonHomeBannerClass}`,
 	(isOverlayMode && !isWallpaperSwitchable) ? 'wallpaper-overlay' : '',
 	(isFullscreenMode && !isWallpaperSwitchable) ? 'wallpaper-fullscreen' : '',
 ]} style={
