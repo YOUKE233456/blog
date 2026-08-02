@@ -838,6 +838,8 @@ const hasMultipleImages =
 <div class={`absolute w-full z-30 pointer-events-none ${mobileNonHomeBannerClass ? 'mobile-main-no-banner' : ''} ${!(isBannerMode && isBackgroundEnabled) ? 'no-banner-layout' : ''}`} style={isFullscreenMode ? 'top: 0;' : `top: ${finalMainPanelTop}`}>
     <!-- The pointer-events-none here prevent blocking the click event of the TOC -->
     <div class="relative w-full xl:w-[92vw] max-w-(--page-width) mx-auto pointer-events-auto">
+        {/* 首页公告跑马灯 - 位于整个内容区最顶部（侧边栏之上，横跨全宽） */}
+        {isHomePageCheck && <HomeTicker />}
         <div id="main-grid"
           class={`transition duration-700 w-full left-0 right-0 grid ${gridCols} grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-2 md:px-4 ${!sidebarConfig.mobileShowSidebar ? 'mobile-no-sidebar' : ''}`}
           data-sidebar-enable={sidebarLayoutConfig.enable ? "true" : "false"}
@@ -881,8 +883,6 @@ const hasMultipleImages =
                     
             {/* 主内容区包装器 - 包含静态栏位和swup容器，作为单个grid item */}
             <div class={staticBarClass}>
-                {/* 首页公告跑马灯 - 位于内容区最顶部（分类导航之前） */}
-                {isHomePageCheck && <HomeTicker />}
                 {/* 分类导航栏 - 全站渲染并显示 */}
                 {shouldRenderCategoryBar && <div id="category-bar-wrapper"><CategoryBar currentPostCategory={postCategory} /></div>}
                 {/* 主内容区 - 始终渲染，确保 Swup 容器存在 */}
