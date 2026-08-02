@@ -6,9 +6,10 @@ import { i18n } from "@/i18n/translation";
 export interface Props {
 	playerUrl: string | string[];
 	playerMode?: "order" | "random";
+	autoPlay?: boolean;
 }
 
-const { playerUrl, playerMode = "order" } = Astro.props;
+const { playerUrl, playerMode = "order", autoPlay = false } = Astro.props;
 
 const urls = Array.isArray(playerUrl) ? playerUrl : [playerUrl];
 const hasMultiple = urls.length > 1;
@@ -63,7 +64,7 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 	)
 }
 
-<script is:inline define:vars={{ urls: urlsJson, playerMode, hasMultiple }}>
+<script is:inline define:vars={{ urls: urlsJson, playerMode, hasMultiple, autoPlay }}>
 	(() => {
 		var urlList = JSON.parse(urls);
 		if (!urlList.length) return;
@@ -80,6 +81,9 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		// 防止 is:inline 脚本重复注册监听器（Swup 导航会重新执行脚本）
 		if (video.getAttribute("data-player-init")) return;
 		video.setAttribute("data-player-init", "true");
+
+		// 单视频时使用原生循环播放（ended 事件不会触发，多视频仍由 onEnded 切换）
+		if (!isMultiple) video.loop = true;
 
 		var isPlaying = false;
 		var currentIndex = 0;
@@ -202,6 +206,14 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		if (!isMultiple) {
 			if (prevBtn) prevBtn.style.display = "none";
 			if (nextBtn) nextBtn.style.display = "none";
+		}
+
+		// 自动播放：打开网站后静音自动循环播放（符合浏览器自动播放策略），可通过配置 autoPlay 关闭
+		if (autoPlay) {
+			isPlaying = true;
+			doPlay();
+			syncAttr();
+			if (overlay) { overlay.classList.remove("opacity-0"); overlay.classList.add("opacity-100"); }
 		}
 
 		function cleanup() {

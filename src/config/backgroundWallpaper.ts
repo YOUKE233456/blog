@@ -63,6 +63,8 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 	},
 	// 横幅壁纸和全屏壁纸共享配置
 	common: {
+		// 打开网站后自动播放背景视频（静音自动播放，浏览器策略允许）
+		autoPlay: true,
 		// 壁纸遮罩暗度，让横幅文字显示更清晰，0-1之间，值越大越暗
 		dimOpacity: 0.2,
 		// 多视频播放模式："order" 顺序循环，"random" 随机切换（仅当 playerUrl 为数组时生效）
@@ -103,11 +105,11 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		},
 		// 导航栏配置
 		navbar: {
-			// 导航栏透明模式："semi" 半透明，"full" 完全透明，"semifull" 动态透明，"none" 无玻璃效果（完全透明文字悬浮，fqzlr.com 同款）
-			transparentMode: "none",
+			// 导航栏透明模式："semi" 半透明（透明白毛玻璃），"full" 完全透明，"semifull" 动态透明，"none" 无玻璃效果
+			transparentMode: "semi",
 			// 毛玻璃模糊度，0 即关闭导航栏的毛玻璃
 			// 注意：导航栏子菜单与浮动面板始终保留毛玻璃，模糊度跟随此项但有最小值
-			blur: 5,
+			blur: 8,
 		},
 		// 水波纹动画效果配置，开启会影响页面性能，请根据自己的喜好开启
 		waves: {

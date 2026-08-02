@@ -13,6 +13,7 @@ export type BackgroundWallpaperConfig = {
 	common?: {
 		dimOpacity?: number; // 横幅文字遮罩暗度，0-1之间，值越大越暗，默认0.15
 		playerMode?: "order" | "random"; // 多视频播放模式："order" 顺序循环（默认），"random" 随机切换
+		autoPlay?: boolean; // 打开网站后是否自动播放背景视频（静音自动播放，默认false）
 		homeText?: {
 			enable: boolean; // 是否在首页显示自定义文字（全局开关）
 			title?: string; // 主标题

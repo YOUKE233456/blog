@@ -20,7 +20,8 @@ export const BANNER_HEIGHT_EXTEND = 65;
 export const BANNER_HEIGHT_HOME: number = BANNER_HEIGHT + BANNER_HEIGHT_EXTEND;
 
 // The height the main panel overlaps the banner, unit: rem
-export const MAIN_PANEL_OVERLAPS_BANNER_HEIGHT = 3.5;
+// 首页 banner 全屏（100vh）时设为 0，首屏完全被壁纸占满，内容从首屏以下开始
+export const MAIN_PANEL_OVERLAPS_BANNER_HEIGHT = 0;
 
 // Page width: rem
 export const PAGE_WIDTH = 100;
