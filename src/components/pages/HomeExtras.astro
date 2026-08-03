@@ -1,7 +1,10 @@
 ---
-// 首页扩展组件：公告跑马灯 + 数据卡片区（站点数据/能力矩阵/社交联系/技能图标）
+// 首页扩展组件：公告跑马灯 + 数据卡片区（站点数据/能力矩阵/分类/标签）
+// 社交联系与技能图标已移至页面底部跑马灯（HomeBottomMarquee.astro）
 // 设计参考：fqzlr.com 首页布局；数据与开关见 src/config/homeWidgetsConfig.ts
 import { Icon } from "astro-icon/components";
+import Categories from "@/components/widget/Categories.astro";
+import Tags from "@/components/widget/Tags.astro";
 import { homeWidgetsConfig } from "@/config/homeWidgetsConfig";
 import { siteConfig } from "@/config";
 import { getCategoryList, getSortedPosts, getTagList } from "@/utils/content-utils";
@@ -33,13 +36,11 @@ const days = Math.max(
 	)
 );
 
-const { abilities, social, skills } = homeWidgetsConfig;
+const { abilities } = homeWidgetsConfig;
 
 const sectionLabel = "text-[0.65rem] font-semibold tracking-[0.2em] text-(--primary)/70 mb-1 uppercase";
 const cardTitle = "text-lg font-bold text-neutral-900 dark:text-neutral-100";
 const cardDesc = "text-sm text-neutral-500 dark:text-neutral-400 mt-1 mb-4";
-const socialChip =
-	"flex items-center gap-2 px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-(--primary)/15 transition-colors whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300";
 ---
 
 {
@@ -100,92 +101,17 @@ const socialChip =
 					)
 				}
 
-				{/* 社交联系 */}
-				{
-					social.enable && (
-						<div class="card-base p-6 overflow-hidden">
-							<p class={sectionLabel}>CONTACT</p>
-							<h3 class={cardTitle}>{social.title}</h3>
-							<p class={cardDesc}>{social.description}</p>
-							<div class="home-marquee">
-								<div class="home-marquee-track flex items-center gap-6 shrink-0">
-									{social.items.map((s) => (
-										<a href={s.url || "#"} class={socialChip}>
-											<Icon is:inline name={s.icon} class="text-lg text-(--primary)" />
-											<span>{s.name}</span>
-										</a>
-									))}
-								</div>
-								<div class="home-marquee-track flex items-center gap-6 shrink-0" aria-hidden="true">
-									{social.items.map((s) => (
-										<a href={s.url || "#"} class={socialChip}>
-											<Icon is:inline name={s.icon} class="text-lg text-(--primary)" />
-											<span>{s.name}</span>
-										</a>
-									))}
-								</div>
-							</div>
-						</div>
-					)
-				}
+				{/* 分类（原社交联系位置，沿用其卡片尺寸） */}
+				<Categories
+					widgetConfig={{ type: "categories", enable: true, position: "top", showTitle: true, specificConfig: { collapseThreshold: 5 } }}
+				/>
 
-				{/* 技能图标 */}
-				{
-					skills.enable && (
-						<div class="card-base p-6 overflow-hidden">
-							<p class={sectionLabel}>SKILLS</p>
-							<h3 class={cardTitle}>{skills.title}</h3>
-							<p class={cardDesc}>{skills.description}</p>
-							<div class="home-marquee">
-								<div class="home-marquee-track flex items-center gap-5 shrink-0">
-									{skills.items.map((s) => (
-										<div class="flex flex-col items-center gap-1.5 min-w-16" title={s.name}>
-											<Icon is:inline name={s.icon} class="text-2xl text-neutral-600 dark:text-neutral-300" />
-											<span class="text-[0.65rem] text-neutral-500 dark:text-neutral-400">
-												{s.name}
-											</span>
-										</div>
-									))}
-								</div>
-								<div class="home-marquee-track flex items-center gap-5 shrink-0" aria-hidden="true">
-									{skills.items.map((s) => (
-										<div class="flex flex-col items-center gap-1.5 min-w-16" title={s.name}>
-											<Icon is:inline name={s.icon} class="text-2xl text-neutral-600 dark:text-neutral-300" />
-											<span class="text-[0.65rem] text-neutral-500 dark:text-neutral-400">
-												{s.name}
-											</span>
-										</div>
-									))}
-								</div>
-							</div>
-						</div>
-					)
-				}
-			</div>
-		</section>
+				{/* 标签（原技能图标位置，沿用其卡片尺寸） */}
+				<Tags
+					widgetConfig={{ type: "tags", enable: true, position: "top", showTitle: true, specificConfig: { collapseThreshold: 10 } }}
+				/>
+		</div>
+	</section>
 	)
 }
 
-<style is:global>
-	.home-marquee {
-		display: flex;
-		width: max-content;
-		animation: home-marquee-scroll 25s linear infinite;
-	}
-	.home-marquee:hover {
-		animation-play-state: paused;
-	}
-	@keyframes home-marquee-scroll {
-		from {
-			transform: translateX(0);
-		}
-		to {
-			transform: translateX(-50%);
-		}
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.home-marquee {
-			animation: none;
-		}
-	}
-</style>

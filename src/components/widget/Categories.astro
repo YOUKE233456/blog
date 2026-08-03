@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-icon/components";
 import ButtonLink from "@/components/common/ButtonLink.astro";
 import WidgetLayout from "@/components/common/WidgetLayout.astro";
 import I18nKey from "@/i18n/i18nKey";
@@ -22,18 +23,183 @@ const showTitle = widgetConfig?.showTitle !== false;
 const isCollapsed = collapseThreshold
 	? categories.length > collapseThreshold
 	: false;
+
+// 两行跑马灯：前一半排第 1 行，后一半排第 2 行
+const half = Math.ceil(categories.length / 2);
+const line1 = categories.slice(0, half);
+const line2 = categories.slice(half);
 ---
 
 <WidgetLayout name={i18n(I18nKey.categories)} showTitle={showTitle} id="categories" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT}
                 class={className} style={style}
 >
-    {categories.map((c) =>
-        <ButtonLink
-            url={c.url}
-            badge={String(c.count)}
-            label={`View all posts in the ${c.name.trim()} category`}
-        >
-            {c.name.trim()}
-        </ButtonLink>
-    )}
+    <div class="row-marquee__search">
+        <Icon is:inline name="material-symbols:search-rounded" class="text-lg text-neutral-400 shrink-0" />
+        <input type="search" class="row-marquee__input" placeholder="搜索分类…" aria-label="搜索分类" />
+    </div>
+    <div class="row-marquee" data-row-marquee>
+        <div class="row-marquee__track">
+            <div class="row-marquee__copy">
+                <div class="row-marquee__line">
+                    {line1.map((c) => (
+                        <ButtonLink
+                            url={c.url}
+                            badge={String(c.count)}
+                            label={`View all posts in the ${c.name.trim()} category`}
+                        >
+                            {c.name.trim()}
+                        </ButtonLink>
+                    ))}
+                </div>
+                <div class="row-marquee__line">
+                    {line2.map((c) => (
+                        <ButtonLink
+                            url={c.url}
+                            badge={String(c.count)}
+                            label={`View all posts in the ${c.name.trim()} category`}
+                        >
+                            {c.name.trim()}
+                        </ButtonLink>
+                    ))}
+                </div>
+            </div>
+            <div class="row-marquee__copy" aria-hidden="true">
+                <div class="row-marquee__line">
+                    {line1.map((c) => (
+                        <ButtonLink
+                            url={c.url}
+                            badge={String(c.count)}
+                            label={`View all posts in the ${c.name.trim()} category`}
+                        >
+                            {c.name.trim()}
+                        </ButtonLink>
+                    ))}
+                </div>
+                <div class="row-marquee__line">
+                    {line2.map((c) => (
+                        <ButtonLink
+                            url={c.url}
+                            badge={String(c.count)}
+                            label={`View all posts in the ${c.name.trim()} category`}
+                        >
+                            {c.name.trim()}
+                        </ButtonLink>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </div>
 </WidgetLayout>
+
+<script is:inline>
+	(() => {
+		const widget = document.getElementById("categories");
+		if (!widget) return;
+
+		// ── 两行跑马灯：JS 驱动无缝滚动（不依赖 CSS animation，避免系统减少动态效果禁用）──
+		const marquee = widget.querySelector("[data-row-marquee]");
+		const track = widget.querySelector(".row-marquee__track");
+		if (marquee && track) {
+			const SPEED = 30; // 像素/秒
+			// 内容不足时克隆（分类少，保证轨道够宽）
+			const childrenCount = () => track.children.length;
+			while (
+				track.scrollWidth < marquee.clientWidth * 2 &&
+				childrenCount() < 50
+			) {
+				const copy = track.firstElementChild.cloneNode(true);
+				copy.setAttribute("aria-hidden", "true");
+				track.appendChild(copy);
+			}
+
+			let x = 0;
+			let last = null;
+			let paused = false;
+			track.addEventListener("mouseenter", () => (paused = true));
+			track.addEventListener("mouseleave", () => (paused = false));
+
+			const step = (ts) => {
+				const count = childrenCount();
+				const period = count > 0 ? track.scrollWidth / count : 0;
+				if (period > 0) {
+					if (last != null && !paused) {
+						x -= (SPEED * (ts - last)) / 1000;
+						if (x <= -period) x += period;
+					}
+					track.style.transform = `translateX(${x}px)`;
+				}
+				last = ts;
+				requestAnimationFrame(step);
+			};
+			requestAnimationFrame(step);
+		}
+
+		// ── 搜索过滤：实时隐藏不匹配的分类 ──
+		const input = widget.querySelector(".row-marquee__input");
+		const items = Array.from(widget.querySelectorAll(".row-marquee a"));
+		if (input) {
+			input.addEventListener("input", () => {
+				const q = input.value.trim().toLowerCase();
+				items.forEach((el) => {
+					const text = (el.textContent || "").trim().toLowerCase();
+					el.style.display = !q || text.includes(q) ? "" : "none";
+				});
+			});
+			// 回车跳转搜索页
+			input.addEventListener("keydown", (e) => {
+				if (e.key === "Enter" && input.value.trim()) {
+					window.location.href =
+						"/search/?q=" + encodeURIComponent(input.value.trim());
+				}
+			});
+		}
+	})();
+</script>
+
+<style>
+	/* 搜索框 */
+	.row-marquee__search {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.25rem 0.5rem;
+		margin-bottom: 0.5rem;
+		border: 1px solid var(--line-divider);
+		border-radius: 0.75rem;
+		background: var(--btn-plain-bg-hover);
+	}
+	.row-marquee__input {
+		flex: 1;
+		min-width: 0;
+		background: transparent;
+		border: none;
+		outline: none;
+		font-size: 0.85rem;
+		color: var(--color-neutral-700);
+	}
+	:root.dark .row-marquee__input {
+		color: var(--color-neutral-300);
+	}
+
+	/* 两行跑马灯轨道 */
+	.row-marquee {
+		overflow: hidden;
+		min-width: 0;
+	}
+	.row-marquee__track {
+		display: flex;
+		width: max-content;
+		will-change: transform;
+	}
+	.row-marquee__copy {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin-right: 1.5rem;
+	}
+	.row-marquee__line {
+		display: flex;
+		gap: 0.5rem;
+		white-space: nowrap;
+	}
+</style>

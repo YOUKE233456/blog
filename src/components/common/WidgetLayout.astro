@@ -78,6 +78,15 @@ const className = Astro.props.class;
 </widget-layout>
 
 <style define:vars={{ collapsedHeight }}>
+    /* 自定义元素默认 display:inline，背景色不会完整覆盖块级子内容（卡片区域会透出壁纸），必须设为 block。
+       注意：此规则未分层，优先级高于 @layer 内的 Tailwind 工具类，因此需要显式补一条 hidden 规则保证隐藏生效 */
+    :global(widget-layout) {
+        display: block;
+    }
+    :global(widget-layout.hidden) {
+        display: none !important;
+    }
+
     .collapsed {
         height: var(--collapsedHeight);
     }

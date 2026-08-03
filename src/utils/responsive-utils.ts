@@ -100,12 +100,12 @@ export function generateSidebarClasses(
 	config: ResponsiveSidebarConfig,
 ): string {
 	const classes = [
-		"mb-4",
 		"hidden",
 		"md:col-span-1",
 		"md:max-w-70",
 		"md:row-start-1",
-		"md:row-end-3",
+		"md:row-end-2",
+		"md:self-start",
 		"md:col-start-1",
 		"onload-animation",
 	];
@@ -127,14 +127,15 @@ export function generateSidebarClasses(
 export function generateRightSidebarClasses(
 	config: ResponsiveSidebarConfig,
 ): string {
-	const classes = ["mb-4", "hidden", "onload-animation"];
+	const classes = ["hidden", "onload-animation"];
 
 	if (config.isBothSidebars && config.tabletSidebar === "right") {
 		// 双侧栏+平板端显示右侧栏：769px+显示右侧栏
 		classes.push(
 			"md:block",
 			"md:row-start-1",
-			"md:row-end-3",
+			"md:row-end-2",
+			"md:self-start",
 			"md:col-span-1",
 			"md:max-w-70",
 			"md:col-start-2", // 平板端在第2列
@@ -145,7 +146,8 @@ export function generateRightSidebarClasses(
 		classes.push(
 			"xl:block",
 			"xl:row-start-1",
-			"xl:row-end-3",
+			"xl:row-end-2",
+			"xl:self-start",
 			"xl:col-span-1",
 			"xl:max-w-70",
 			"xl:col-start-3",
@@ -155,7 +157,8 @@ export function generateRightSidebarClasses(
 		classes.push(
 			"md:block",
 			"md:row-start-1",
-			"md:row-end-3",
+			"md:row-end-2",
+			"md:self-start",
 			"md:col-span-1",
 			"md:max-w-70",
 			"md:col-start-2",
@@ -165,7 +168,8 @@ export function generateRightSidebarClasses(
 		classes.push(
 			"xl:block",
 			"xl:row-start-1",
-			"xl:row-end-3",
+			"xl:row-end-2",
+			"xl:self-start",
 			"xl:col-span-1",
 			"xl:max-w-70",
 			"xl:col-start-3",

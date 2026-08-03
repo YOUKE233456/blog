@@ -1,0 +1,189 @@
+---
+// 首页底部跑马灯：技能图标 + 社交联系（公告同款上下主题色横线 + 无缝滚动）
+// 数据见 src/config/homeWidgetsConfig.ts 的 social / skills
+import { Icon } from "astro-icon/components";
+import { homeWidgetsConfig } from "@/config/homeWidgetsConfig";
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+
+const { class: className, style } = Astro.props;
+const { social, skills } = homeWidgetsConfig;
+
+const socialChip =
+	"flex items-center gap-2 px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-(--primary)/15 transition-colors whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300";
+---
+
+{
+	(social.enable || skills.enable) && (
+		<section id="home-bottom-marquee" class:list={["flex flex-col gap-2", className]} style={style} aria-label="首页底部跑马灯">
+			{/* 技能图标（在上） */}
+			{skills.enable && (
+				<div class="ticker-banner">
+					<div class="ticker-banner__inner">
+						<span class="ticker-banner__label">{skills.title}</span>
+						{/* 独立视口：轨道内容只在此区域内滚动，不会盖到左侧标签 */}
+						<div class="ticker-banner__viewport">
+							<div class="ticker-banner__track">
+								{/* 每份内容尾部自带与内部一致的间隔（margin-right = gap-5），保证两份衔接处间隔一致、循环无空白 */}
+								<div class="home-marquee-track flex items-center gap-5 shrink-0" style="margin-right: 1.25rem">
+									{skills.items.map((s) => (
+										<div class="flex flex-col items-center gap-1.5 min-w-16" title={s.name}>
+											<Icon is:inline name={s.icon} class="text-2xl text-neutral-600 dark:text-neutral-300" />
+											<span class="text-[0.65rem] text-neutral-500 dark:text-neutral-400">
+												{s.name}
+											</span>
+										</div>
+									))}
+								</div>
+								<div class="home-marquee-track flex items-center gap-5 shrink-0" style="margin-right: 1.25rem" aria-hidden="true">
+									{skills.items.map((s) => (
+										<div class="flex flex-col items-center gap-1.5 min-w-16" title={s.name}>
+											<Icon is:inline name={s.icon} class="text-2xl text-neutral-600 dark:text-neutral-300" />
+											<span class="text-[0.65rem] text-neutral-500 dark:text-neutral-400">
+												{s.name}
+											</span>
+										</div>
+									))}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+
+			{/* 社交联系（在下） */}
+			{social.enable && (
+				<div class="ticker-banner">
+					<div class="ticker-banner__inner">
+						<span class="ticker-banner__label">{social.title}</span>
+						<div class="ticker-banner__viewport">
+							<div class="ticker-banner__track">
+								{/* 每份内容尾部自带与内部一致的间隔（margin-right = gap-6） */}
+								<div class="home-marquee-track flex items-center gap-6 shrink-0" style="margin-right: 1.5rem">
+									{social.items.map((s) => (
+										<a href={s.url || "#"} class={socialChip}>
+											<Icon is:inline name={s.icon} class="text-lg text-(--primary)" />
+											<span>{s.name}</span>
+										</a>
+									))}
+								</div>
+								<div class="home-marquee-track flex items-center gap-6 shrink-0" style="margin-right: 1.5rem" aria-hidden="true">
+									{social.items.map((s) => (
+										<a href={s.url || "#"} class={socialChip}>
+											<Icon is:inline name={s.icon} class="text-lg text-(--primary)" />
+											<span>{s.name}</span>
+										</a>
+									))}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+		</section>
+	)
+}
+
+<style is:global>
+	/* 横跨整个主网格（与公告同宽），不局限在主列内 */
+	#home-bottom-marquee {
+		grid-column: 1 / -1;
+	}
+
+	/* 上下两条横线：与首页公告跑马灯一致，宽度 100% 占满内容区，跟随主题色相 */
+	.ticker-banner {
+		position: relative;
+		width: 100%;
+		overflow: hidden;
+		padding: 0.6rem 0.5rem;
+		border-top: 2px solid color-mix(in oklch, var(--primary) 55%, transparent);
+		border-bottom: 2px solid color-mix(in oklch, var(--primary) 55%, transparent);
+	}
+	@media (min-width: 768px) {
+		.ticker-banner {
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
+	}
+	.ticker-banner__inner {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		min-width: 0;
+	}
+	.ticker-banner__label {
+		flex-shrink: 0;
+		font-weight: 600;
+		color: var(--primary);
+		white-space: nowrap;
+		font-size: 0.95rem;
+	}
+	/* 独立视口：只裁剪轨道区域，轨道内容平移时不会覆盖到左侧标签 */
+	.ticker-banner__viewport {
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+	}
+	/* 无缝滚动轨道：由 JS 驱动 translateX 循环（不依赖 CSS animation，
+	   避免 prefers-reduced-motion 系统设置禁用动画导致没有跑马灯效果） */
+	.ticker-banner__track {
+		display: flex;
+		width: max-content;
+		will-change: transform;
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		// JS 驱动无缝滚动：每帧左移，按"单份内容宽度"回绕，形成循环
+		const viewports = document.querySelectorAll(".ticker-banner__viewport");
+		if (!viewports.length) return;
+
+		const SPEED = 40; // 像素/秒
+
+		viewports.forEach((viewport) => {
+			if (viewport.getAttribute("data-marquee-init")) return;
+			viewport.setAttribute("data-marquee-init", "true");
+
+			const track = viewport.querySelector(".ticker-banner__track");
+			if (!track) return;
+
+			// 内容不足时动态克隆（社交等短内容可能比视口窄，不克隆会在滚动末尾出现空白）
+			const childrenCount = () => track.children.length;
+			while (
+				track.scrollWidth < viewport.clientWidth * 2 &&
+				childrenCount() < 50
+			) {
+				const copy = track.firstElementChild.cloneNode(true);
+				copy.setAttribute("aria-hidden", "true");
+				track.appendChild(copy);
+			}
+
+			let x = 0;
+			let last = null;
+			let paused = false;
+
+			track.addEventListener("mouseenter", () => (paused = true));
+			track.addEventListener("mouseleave", () => (paused = false));
+
+			const step = (ts) => {
+				const count = childrenCount();
+				// 回绕周期 = 单份内容宽度（所有份等宽，含尾部间隔）
+				const period = count > 0 ? track.scrollWidth / count : 0;
+				if (period > 0) {
+					if (last != null && !paused) {
+						x -= (SPEED * (ts - last)) / 1000;
+						if (x <= -period) x += period;
+					}
+					track.style.transform = `translateX(${x}px)`;
+				}
+				last = ts;
+				requestAnimationFrame(step);
+			};
+			requestAnimationFrame(step);
+		});
+	})();
+</script>

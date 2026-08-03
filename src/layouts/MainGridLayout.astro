@@ -14,6 +14,7 @@ import BackgroundPlayer from "@/components/features/BackgroundPlayer.astro";
 import BannerQuote from "@/components/features/BannerQuote.astro";
 import TypewriterText from "@/components/features/TypewriterText.astro";
 import HomeTicker from "@/components/pages/HomeTicker.astro";
+import HomeBottomMarquee from "@/components/pages/HomeBottomMarquee.astro";
 import CategoryBar from "@/components/layout/CategoryBar.astro";
 import {
 	backgroundWallpaper,
@@ -836,7 +837,7 @@ const hasMultipleImages =
         {/* 首页公告跑马灯 - 位于整个内容区最顶部（侧边栏之上，横跨全宽） */}
         {isHomePageCheck && <HomeTicker />}
         <div id="main-grid"
-          class={`transition duration-700 w-full left-0 right-0 grid ${gridCols} grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-2 md:px-4 ${!sidebarConfig.mobileShowSidebar ? 'mobile-no-sidebar' : ''}`}
+          class={`transition duration-700 w-full left-0 right-0 grid ${gridCols} grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-2 px-2 md:px-4 ${!sidebarConfig.mobileShowSidebar ? 'mobile-no-sidebar' : ''}`}
           data-sidebar-enable={sidebarLayoutConfig.enable ? "true" : "false"}
           data-grid-hide-sidebar-on-post={hideSidebarOnPostPage ? "true" : "false"}
           data-sidebar-position={sidebarLayoutConfig.position}
@@ -930,6 +931,9 @@ const hasMultipleImages =
 					<SideBar side="bottom" headings={headings} encrypted={encrypted}></SideBar>
                 </div>
             )}
+
+            {/* 首页底部跑马灯：社交联系 + 技能图标（网格直接子项、跨全宽，位于 footer 之上） */}
+            {isHomePageCheck && <HomeBottomMarquee class="onload-animation" />}
 
             <div class={footerClassName}>
                 <Footer></Footer>

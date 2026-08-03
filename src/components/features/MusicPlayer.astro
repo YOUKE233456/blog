@@ -131,23 +131,26 @@ const widgetId =
     </button>
 </div>
 
-<!-- Lyrics Drawer -->
-<div class="lrc-drawer grid transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] grid-rows-[0fr] opacity-0">
-    <div class="overflow-hidden min-h-0">
-        <div class="mt-2 pt-2 border-t border-neutral-100 dark:border-white/5 mx-1">
-            <div class="lrc-container h-48 overflow-y-auto custom-scrollbar flex flex-col items-center gap-2 p-4 py-24 text-center relative scroll-smooth" role="listbox" aria-label={i18n(I18nKey.musicLyrics)}>
-                <div class="text-neutral-400 text-sm py-10" role="option">{i18n(I18nKey.musicNoLyrics)}</div>
+<!-- 内容区：歌单/歌词切换，占满音乐卡片剩余空间（音乐卡片高度与日历/站点信息底部对齐） -->
+<div class="music-content">
+    <!-- Lyrics Drawer -->
+    <div class="lrc-drawer grid transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] grid-rows-[0fr] opacity-0">
+        <div class="overflow-hidden min-h-0">
+            <div class="mt-2 pt-2 border-t border-neutral-100 dark:border-white/5 mx-1">
+                <div class="lrc-container overflow-y-auto custom-scrollbar flex flex-col items-center gap-2 p-4 py-8 text-center relative scroll-smooth" role="listbox" aria-label={i18n(I18nKey.musicLyrics)}>
+                    <div class="text-neutral-400 text-sm py-10" role="option">{i18n(I18nKey.musicNoLyrics)}</div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Playlist Drawer (Accordion) -->
-<div class="playlist-drawer grid transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] grid-rows-[0fr] opacity-0">
-    <div class="overflow-hidden min-h-0">
+    <!-- Playlist Drawer (默认展开显示歌单；内联 grid-template-rows 供 JS 的 drawerOpen 判断) -->
+    <div class="playlist-drawer grid transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] grid-rows-[1fr] opacity-100" style="grid-template-rows: 1fr; opacity: 1;">
+        <div class="overflow-hidden min-h-0">
             <div class="mt-2 pt-2 border-t border-neutral-100 dark:border-white/5 mx-1">
-            <div class="playlist-container max-h-48 overflow-y-auto custom-scrollbar pr-1 pb-1 relative" role="listbox" aria-label={i18n(I18nKey.musicPlaylist)}>
-                <!-- Items -->
+                <div class="playlist-container overflow-y-auto custom-scrollbar pr-1 pb-1 relative" role="listbox" aria-label={i18n(I18nKey.musicPlaylist)}>
+                    <!-- Items -->
+                </div>
             </div>
         </div>
     </div>
@@ -240,6 +243,8 @@ const widgetId =
     var OVERSCAN = 8;
     var local = {
         isUserScrolling: false,
+        autoScrolling: false,
+        autoScrollEndTimer: null,
         scrollTimeout: null,
         currentLrcIndex: -1,
         vs: {
@@ -582,6 +587,8 @@ const widgetId =
                 var lineOffset = line.offsetTop;
                 var lineHeight = line.offsetHeight;
                 var targetScroll = lineOffset - (containerHeight / 2) + (lineHeight / 2);
+                // 标记自动滚动中：scroll 事件监听据此区分用户拖动，避免误判
+                local.autoScrolling = true;
                 ui.lrcContainer.scrollTo({ top: targetScroll, behavior: 'smooth' });
             }
         }
@@ -781,19 +788,9 @@ const widgetId =
     function resetScrollTimeout() {
         clearTimeout(local.scrollTimeout);
         local.scrollTimeout = setTimeout(function () {
+            // 仅恢复自动跟随标记；不再强制拉回当前行（原逻辑 3 秒后跳回，
+            // 会让滚动条拖动看起来"不生效"）。后续歌词高亮更新会自然滚动到当前行。
             local.isUserScrolling = false;
-            // Snap back to current lyric
-            var s = mgr.getState();
-            if (s.currentLrcIndex >= 0) {
-                var line = ui.lrcContainer.querySelector('.lrc-line[data-index="' + s.currentLrcIndex + '"]');
-                if (line) {
-                    var containerHeight = ui.lrcContainer.clientHeight;
-                    var lineOffset = line.offsetTop;
-                    var lineHeight = line.offsetHeight;
-                    var targetScroll = lineOffset - (containerHeight / 2) + (lineHeight / 2);
-                    ui.lrcContainer.scrollTo({ top: targetScroll, behavior: 'auto' });
-                }
-            }
         }, 3000);
     }
 
@@ -802,6 +799,19 @@ const widgetId =
         resetScrollTimeout();
     });
     ui.lrcContainer.addEventListener('touchstart', function () {
+        local.isUserScrolling = true;
+        resetScrollTimeout();
+    });
+    // 拖动滚动条也会触发 scroll 事件（区别于自动滚动），修复滚动轴拖动被自动滚动拉回的问题
+    ui.lrcContainer.addEventListener('scroll', function () {
+        if (local.autoScrolling) {
+            // 自动滚动进行中：滚动停止后清除标记
+            clearTimeout(local.autoScrollEndTimer);
+            local.autoScrollEndTimer = setTimeout(function () {
+                local.autoScrolling = false;
+            }, 150);
+            return;
+        }
         local.isUserScrolling = true;
         resetScrollTimeout();
     });
@@ -868,5 +878,53 @@ const widgetId =
     @keyframes eq-bounce {
         0%, 100% { height: 4px; }
         50%      { height: 14px; }
+    }
+
+    /* 音乐卡片：高度与主页日历/站点信息底部对齐（日历底 3300 - 音乐卡片顶 2674 = 626px），
+       内部纵向布局，内容区（歌单/歌词）占满剩余空间 */
+    :global(widget-layout[data-id$="-layout"]) {
+        height: 626px;
+        display: flex;
+        flex-direction: column;
+    }
+    :global(widget-layout[data-id$="-layout"] .collapse-wrapper) {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+    }
+    .music-player-widget {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .music-content {
+        flex: 1;
+        min-height: 0;
+        position: relative;
+        overflow: hidden;
+    }
+    /* 抽屉改为绝对定位填满内容区：展开(1fr)时占满，折叠(0fr)时内容隐藏且不占空间 */
+    .lrc-drawer,
+    .playlist-drawer {
+        position: absolute;
+        inset: 0;
+    }
+    /* 抽屉内部链条高度传递：wrapper → 中间 div → 容器，保证歌词/歌单在内容区内滚动 */
+    .lrc-drawer > div,
+    .playlist-drawer > div {
+        display: flex;
+        flex-direction: column;
+    }
+    .lrc-drawer > div > div,
+    .playlist-drawer > div > div {
+        flex: 1;
+        min-height: 0;
+    }
+    .playlist-container,
+    .lrc-container {
+        height: 100%;
+        max-height: none;
     }
 </style>

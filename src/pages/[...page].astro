@@ -3,6 +3,7 @@ import type { GetStaticPaths } from "astro";
 import Pagination from "@/components/common/Pagination.astro";
 import PostPage from "@/components/layout/PostPage.astro";
 import HomeExtras from "@/components/pages/HomeExtras.astro";
+import Calendar from "@/components/widget/Calendar.astro";
 import { siteConfig } from "@/config";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getSortedPosts } from "@/utils/content-utils";
@@ -22,12 +23,25 @@ const len = page.data.length;
 <MainGridLayout>
   {
     page.currentPage === 1 && (
-      <HomeExtras class="onload-animation" style={`animation-delay: calc(var(--content-delay) + 100ms)`} />
+      <>
+        <HomeExtras class="onload-animation" style={`animation-delay: calc(var(--content-delay) + 100ms)`} />
+        {/* 日历宽版：填补原文章列表空位（左日历网格 + 右当月文章列表）；margin-top 补足网格 gap-4 到与卡片间距 gap-6 一致 */}
+        <Calendar
+          layout="wide"
+          widgetConfig={{ type: "calendar", enable: true, position: "top", showTitle: true, specificConfig: { calendar: { showHeatmap: false } } }}
+          class="onload-animation"
+          style={`animation-delay: calc(var(--content-delay) + 150ms); margin-top: 2rem`}
+        />
+      </>
     )
   }
-  <PostPage page={page} />
   {
-    page.total > page.size && (
+    page.currentPage > 1 && (
+      <PostPage page={page} />
+    )
+  }
+  {
+    page.currentPage > 1 && page.total > page.size && (
       <Pagination
         class="mx-auto onload-animation"
         page={page}
