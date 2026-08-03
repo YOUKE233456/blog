@@ -51,7 +51,7 @@ const len = page.data.length;
   }
 </MainGridLayout>
 
-<script>
+<script is:inline>
   // 响应式分页处理脚本
   document.addEventListener("DOMContentLoaded", function () {
     // 如果启用了响应式分页，添加相应的CSS类
@@ -61,7 +61,7 @@ const len = page.data.length;
       document.body.classList.add(`device-${deviceType}`);
 
       // 监听窗口大小变化
-      let resizeTimeout: any;
+      let resizeTimeout;
       window.addEventListener("resize", function () {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(function () {
