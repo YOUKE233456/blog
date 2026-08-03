@@ -166,10 +166,10 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 			},
 		},
 		{
-			// 组件类型：侧边栏目录组件（只在文章详情页显示）
+			// 组件类型：侧边栏目录组件（文章页右栏 site 下方会出现多余板块，已禁用）
 			type: "sidebarToc",
 			// 是否启用该组件
-			enable: true,
+			enable: false,
 			// 组件位置
 			position: "top",
 			// 是否在文章详情页显示

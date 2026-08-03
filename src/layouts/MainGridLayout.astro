@@ -989,10 +989,20 @@ const hasMultipleImages =
 					site.style.height = Math.max(200, Math.round(baseBottom - top)) + "px";
 				}
 			} else {
-				// 其他页面：固定为主页样板高度（音乐 672px / 站点信息 537px），
-				// 不随页面内容伸缩——内容短时卡片会被压扁导致播放列表/歌词等显示不全
+				// 其他页面：音乐固定为主页样板高度 672px；
+				// 站点信息底部与音乐底部对齐（music 底 - site 顶）——
+				// 常规页面 site 顶固定(653px)时结果等于主页样板 537px；
+				// 文章页右栏有 TOC 占位导致 site 顶更低(313px)，此时自动加长，保证底线平行
 				if (music) music.style.height = "672px";
-				if (site) site.style.height = "537px";
+				if (site) {
+					var scrollY = window.scrollY || 0;
+					var musicBottom = music
+						? music.getBoundingClientRect().bottom + scrollY
+						: 0;
+					var siteTop = site.getBoundingClientRect().top + scrollY;
+					site.style.height =
+						Math.max(200, Math.round(musicBottom - siteTop)) + "px";
+				}
 			}
 		}
 

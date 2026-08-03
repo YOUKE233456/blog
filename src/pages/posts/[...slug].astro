@@ -128,6 +128,9 @@ const relatedPosts = await getRelatedPosts(entry, 5);
     type="application/ld+json"
     set:html={JSON.stringify(jsonLd)}
   />
+  <!-- 文章内容滚动区：正文+导航+相关/随机文章限高 1030px（music 底 1190 - 滚动区顶 160），
+       与两侧音乐/站点信息卡片底部平行；文章过长时在区内滚动，评论留在滚动区外 -->
+  <div class="post-scroll max-h-[1030px] overflow-y-auto custom-scrollbar">
   <div
     class="flex w-full rounded-(--radius-large) overflow-hidden relative mb-4"
   >
@@ -589,7 +592,8 @@ const relatedPosts = await getRelatedPosts(entry, 5);
   </div>
 
   <RecommendedPost relatedPosts={relatedPosts} currentPostId={entry.id} />
+  </div>
 
-  <!-- 评论 -->
+  <!-- 评论（滚动区外） -->
   {entry.data.comment && !entry.data.password && <Comment post={entry} />}
 </MainGridLayout>
