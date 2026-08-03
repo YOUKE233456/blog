@@ -334,12 +334,15 @@ const isConfigured = !!(BILIBILI_UID || (TMDB_API_KEY && TMDB_LIST_ID));
               </div>
             </div>
 
-            {/* 番剧网格（Svelte 交互组件） */}
-            <AnimeGrid
-              client:load
-              items={animeList}
-              bilibiliAverageRating={bilibiliAverageRating}
-            />
+            {/* 番剧网格（Svelte 交互组件）；固定高度 762px（music 底 1190 - 容器顶 428），
+                底部与两侧音乐/站点信息卡片底部对齐，超出滚动 */}
+            <div class="page-grid-scroll max-h-[762px] overflow-y-auto custom-scrollbar">
+              <AnimeGrid
+                client:load
+                items={animeList}
+                bilibiliAverageRating={bilibiliAverageRating}
+              />
+            </div>
           </>
         )}
       </div>

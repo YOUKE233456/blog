@@ -29,11 +29,12 @@ for (const post of posts) {
 }
 
 // 站点运行天数
+const startDate = siteConfig.siteStartDate
+	? new Date(siteConfig.siteStartDate)
+	: new Date();
 const days = Math.max(
 	1,
-	Math.floor(
-		(Date.now() - new Date(siteConfig.siteStartDate).getTime()) / 86400000
-	)
+	Math.floor((Date.now() - startDate.getTime()) / 86400000)
 );
 
 const { abilities } = homeWidgetsConfig;

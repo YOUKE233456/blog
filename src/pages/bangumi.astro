@@ -243,17 +243,19 @@ const activeTab = tabs[0]?.id || "anime";
               </p>
             </div>
           ) : (
-            <BangumiGrid
-              client:load
-              subjectBaseUrl={bangumiConfig.subjectBaseUrl}
-              fetchConfig={{
-                username: bangumiConfig.username!,
-                apiUrl: bangumiConfig.apiUrl,
-                categories: bangumiConfig.categories,
-                categoryOrder: siteConfig.bangumi?.categoryOrder || [],
-                pagination: bangumiConfig.pagination,
-              }}
-            />
+            <div class="page-grid-scroll max-h-[908px] overflow-y-auto custom-scrollbar">
+              <BangumiGrid
+                client:load
+                subjectBaseUrl={bangumiConfig.subjectBaseUrl}
+                fetchConfig={{
+                  username: bangumiConfig.username!,
+                  apiUrl: bangumiConfig.apiUrl,
+                  categories: bangumiConfig.categories,
+                  categoryOrder: siteConfig.bangumi?.categoryOrder || [],
+                  pagination: bangumiConfig.pagination,
+                }}
+              />
+            </div>
           )}
         </>
       ) : (
@@ -273,7 +275,9 @@ const activeTab = tabs[0]?.id || "anime";
         </div>
       ) : tabs.length > 0 ? (
         <>
-          <BangumiGrid client:load tabs={tabs} initialActiveTab={activeTab} bangumiData={bangumiData} subjectBaseUrl={bangumiConfig.subjectBaseUrl} />
+          <div class="page-grid-scroll max-h-[908px] overflow-y-auto custom-scrollbar">
+            <BangumiGrid client:load tabs={tabs} initialActiveTab={activeTab} bangumiData={bangumiData} subjectBaseUrl={bangumiConfig.subjectBaseUrl} />
+          </div>
         </>
       ) : (
         <div class="text-center py-16">

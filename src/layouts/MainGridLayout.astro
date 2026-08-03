@@ -945,6 +945,93 @@ const hasMultipleImages =
     </div>
 </div>
 
+<script is:inline>
+	(() => {
+		// 音乐/站点信息卡片高度策略：
+		// - 主页：按主内容(#swup-container)底部动态对齐，随日历/视口伸缩（主页样板，始终正常）；
+		// - 其他页面：强制固定为主页样板高度（音乐 672px / 站点信息 537px），
+		//   不随页面内容伸缩——内容短时卡片会被压扁导致播放列表/歌词等显示不全。
+		// - 移动端：侧边栏位于页面底部(mobile-bottom-sidebar)，无需左右对齐，跳过。
+		function alignSideWidgets() {
+			var swup = document.getElementById("swup-container");
+			if (!swup) return;
+			// 禁掉侧边栏入场动画：页面异步渲染（AnimeGrid/BangumiGrid/日历等）会触发
+			// onload-animation 重放，导致卡片短暂消失/下移 32px（translateY 2rem），
+			// 破坏对齐测量与视觉稳定。动画重放时测量会把偏移算进高度，造成 640/672 抖动。
+			// 注意：.onload-animation 基础样式为 opacity:0（靠动画变到 1），
+			// 禁动画后必须同步补 opacity:1，否则侧边栏会整个不可见。
+			var bars = document.querySelectorAll(
+				"#left-sidebar, #right-sidebar, #left-sidebar .onload-animation, #right-sidebar .onload-animation",
+			);
+			for (var i = 0; i < bars.length; i++) {
+				bars[i].style.animation = "none";
+				bars[i].style.opacity = "1";
+			}
+			var music = document.querySelector('widget-layout[data-id$="-layout"]');
+			var site = document.querySelector('widget-layout[data-id="site-info"]');
+			if (!music && !site) return;
+			// 移动端：侧边栏位于页面底部(mobile-bottom-sidebar)，恢复自然高度（清除桌面端设置的固定高度）
+			if (window.innerWidth < 1024) {
+				if (music && music.style.height) music.style.height = "";
+				if (site && site.style.height) site.style.height = "";
+				return;
+			}
+
+			if (document.body.classList.contains("is-home")) {
+				var scrollY = window.scrollY || 0;
+				var baseBottom = swup.getBoundingClientRect().bottom + scrollY;
+				if (music) {
+					var top = music.getBoundingClientRect().top + scrollY;
+					music.style.height = Math.max(200, Math.round(baseBottom - top)) + "px";
+				}
+				if (site) {
+					var top = site.getBoundingClientRect().top + scrollY;
+					site.style.height = Math.max(200, Math.round(baseBottom - top)) + "px";
+				}
+			} else {
+				// 其他页面：固定为主页样板高度（音乐 672px / 站点信息 537px），
+				// 不随页面内容伸缩——内容短时卡片会被压扁导致播放列表/歌词等显示不全
+				if (music) music.style.height = "672px";
+				if (site) site.style.height = "537px";
+			}
+		}
+
+		var alignTimer = null;
+		function scheduleAlign() {
+			clearTimeout(alignTimer);
+			alignTimer = setTimeout(alignSideWidgets, 250);
+		}
+
+		// 页面加载、窗口缩放、Swup 页面切换后对齐
+		// 延迟需覆盖 onload-animation 入场动画（translateY 偏移不影响 ResizeObserver，必须等动画结束）
+		window.addEventListener("load", function () {
+			setTimeout(alignSideWidgets, 900);
+		});
+		window.addEventListener("resize", scheduleAlign);
+		document.addEventListener("swup:contentReplaced", function () {
+			setTimeout(alignSideWidgets, 900);
+		});
+		// 字体加载完成（FOUT 会导致文字重排、高度变化）后重新对齐
+		if (document.fonts && document.fonts.ready) {
+			document.fonts.ready.then(function () {
+				setTimeout(alignSideWidgets, 100);
+			});
+		}
+		// 布局变化（追番/番组等客户端渲染网格、字体重排、头像图片加载等）后防抖对齐，
+		// 保证高度在布局稳定后固定，而不是在多个时间点各测一次互相覆盖。
+		// 观察主内容与左右侧边栏（profile 头像/动态等加载也会改变侧边栏高度，进而影响对齐）
+		if (window.ResizeObserver) {
+			var obs = new ResizeObserver(scheduleAlign);
+			var swupEl = document.getElementById("swup-container");
+			if (swupEl) obs.observe(swupEl);
+			var leftEl = document.getElementById("left-sidebar");
+			if (leftEl) obs.observe(leftEl);
+			var rightEl = document.getElementById("right-sidebar");
+			if (rightEl) obs.observe(rightEl);
+		}
+	})();
+</script>
+
 <FloatingControls headings={headings} encrypted={encrypted} />
 
 <!--

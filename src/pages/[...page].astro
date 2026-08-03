@@ -87,38 +87,4 @@ const len = page.data.length;
     if (width < 1024) return "tablet";
     return "desktop";
   }
-
-  // 首页侧边卡片与日历底部动态对齐：
-  // 日历高度会随四卡片(分类/标签跑马灯)、视口宽度变化，硬编码高度无法精确对齐，
-  // 改为按日历实际底部位置重算音乐/站点信息卡片高度（仅首页存在日历卡片时执行）
-  function alignSideCards() {
-    const cal = document.querySelector('widget-layout[data-id="calendar-widget"]');
-    if (!cal) return;
-    const scrollY = window.scrollY || 0;
-    const calBottom = cal.getBoundingClientRect().bottom + scrollY;
-    const music = document.querySelector('widget-layout[data-id$="-layout"]');
-    const site = document.querySelector('widget-layout[data-id="site-info"]');
-    if (music) {
-      const top = music.getBoundingClientRect().top + scrollY;
-      music.style.height = Math.max(200, Math.round(calBottom - top)) + "px";
-    }
-    if (site) {
-      const top = site.getBoundingClientRect().top + scrollY;
-      site.style.height = Math.max(200, Math.round(calBottom - top)) + "px";
-    }
-  }
-  // 页面加载后等入场动画完成再对齐；窗口缩放时重算
-  // 二次调用：首次设置高度会影响网格行高，需收敛一次
-  window.addEventListener("load", function () {
-    setTimeout(alignSideCards, 600);
-    setTimeout(alignSideCards, 1200);
-  });
-  window.addEventListener("resize", function () {
-    setTimeout(alignSideCards, 200);
-    setTimeout(alignSideCards, 500);
-  });
-  document.addEventListener("swup:contentReplaced", function () {
-    setTimeout(alignSideCards, 600);
-    setTimeout(alignSideCards, 1200);
-  });
 </script>
