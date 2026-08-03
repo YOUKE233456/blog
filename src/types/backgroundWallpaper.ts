@@ -7,8 +7,9 @@ export type BackgroundWallpaperConfig = {
 		| {
 				desktop?: string | string[];
 				mobile?: string | string[];
-				playerUrl?: string | string[]; // 背景视频播放地址，支持单个视频路径或数组（多视频列表循环）
-		  }; // 支持单个图片、图片数组或分别设置桌面端和移动端图片
+					playerUrl?: string | string[]; // 背景视频播放地址，支持单个视频路径或数组（多视频列表循环）
+					mobilePlayerUrl?: string | string[]; // 移动端背景视频播放地址，手机硬解能力有限（4K High@L5.1 常失败），可用 1080p 兼容版本
+			  }; // 支持单个图片、图片数组或分别设置桌面端和移动端图片
 	// 横幅壁纸和全屏壁纸共享配置
 	common?: {
 		dimOpacity?: number; // 横幅文字遮罩暗度，0-1之间，值越大越暗，默认0.15

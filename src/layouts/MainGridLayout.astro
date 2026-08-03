@@ -615,7 +615,7 @@ const hasMultipleImages =
     )}
     
     {backgroundWallpaper.playerEnable && typeof backgroundWallpaper.src === "object" && !Array.isArray(backgroundWallpaper.src) && backgroundWallpaper.src.playerUrl && (
-        <BackgroundPlayer playerUrl={backgroundWallpaper.src.playerUrl} playerMode={backgroundWallpaper.common?.playerMode ?? "order"} autoPlay={backgroundWallpaper.common?.autoPlay ?? false} />
+        <BackgroundPlayer playerUrl={backgroundWallpaper.src.playerUrl} mobilePlayerUrl={backgroundWallpaper.src.mobilePlayerUrl} playerMode={backgroundWallpaper.common?.playerMode ?? "order"} autoPlay={backgroundWallpaper.common?.autoPlay ?? false} />
     )}
 
     <div id="banner-dim-container" class="absolute inset-0 z-10 pointer-events-none">

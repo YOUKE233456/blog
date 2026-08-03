@@ -60,6 +60,9 @@ export const backgroundWallpaper: BackgroundWallpaperConfig = {
 		// 支持单个视频路径（字符串）或多个视频循环（数组，参考上面壁纸配置）
 		// 支持远程视频URL，本地视频请放在 public/assets/videos/ 目录下
 		playerUrl: "/assets/videos/banner.mp4",
+		// 移动端视频地址：4K H.264 High@L5.1 超出多数手机硬解能力（moov 在文件尾也导致加载失败），
+		// 转码为 1080p High@L4.1 + faststart 版本供手机播放（banner-mobile.mp4）
+		mobilePlayerUrl: "/assets/videos/banner-mobile.mp4",
 	},
 	// 横幅壁纸和全屏壁纸共享配置
 	common: {

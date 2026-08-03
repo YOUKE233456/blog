@@ -5,15 +5,18 @@ import { i18n } from "@/i18n/translation";
 
 export interface Props {
 	playerUrl: string | string[];
+	mobilePlayerUrl?: string | string[];
 	playerMode?: "order" | "random";
 	autoPlay?: boolean;
 }
 
-const { playerUrl, playerMode = "order", autoPlay = false } = Astro.props;
+const { playerUrl, mobilePlayerUrl, playerMode = "order", autoPlay = false } = Astro.props;
 
 const urls = Array.isArray(playerUrl) ? playerUrl : [playerUrl];
+const mobileUrls = mobilePlayerUrl ? (Array.isArray(mobilePlayerUrl) ? mobilePlayerUrl : [mobilePlayerUrl]) : [];
 const hasMultiple = urls.length > 1;
 const urlsJson = JSON.stringify(urls);
+const mobileUrlsJson = JSON.stringify(mobileUrls);
 
 const tPrev = i18n(I18nKey.videoPrev);
 const tNext = i18n(I18nKey.videoNext);
@@ -64,10 +67,23 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 	)
 }
 
-<script is:inline define:vars={{ urls: urlsJson, playerMode, hasMultiple, autoPlay }}>
+<script is:inline define:vars={{ urls: urlsJson, mobileUrls: mobileUrlsJson, playerMode, hasMultiple, autoPlay }}>
 	(() => {
+		// 移动端检测：Android/iPhone/iPod 直接命中；iPadOS 13+ UA 伪装成 Macintosh，用触屏点数识别
+		function isMobileDevice() {
+			var ua = navigator.userAgent || "";
+			if (/Android|iPhone|iPod/i.test(ua)) return true;
+			if (/iPad|Macintosh/i.test(ua) && navigator.maxTouchPoints > 1) return true;
+			return false;
+		}
+
 		var urlList = JSON.parse(urls);
 		if (!urlList.length) return;
+
+		// 移动端优先使用兼容视频（如 1080p 版本）：手机对 4K H.264 High@L5.1 硬解支持有限，会触发 onError 显示"视频加载失败"
+		var mobileList = JSON.parse(mobileUrls);
+		if (mobileList.length && isMobileDevice()) urlList = mobileList;
+
 		var isMultiple = urlList.length > 1;
 
 		var overlay = document.getElementById("bg-player-overlay");
