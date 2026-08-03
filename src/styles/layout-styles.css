@@ -711,14 +711,16 @@ html[data-wallpaper-mode="fullscreen"] .absolute.w-full.z-30.no-banner-layout {
 
 /* ============================================
  * Fullscreen 模式 - 全屏壁纸
- * 壁纸全屏显示，水波纹在底部，内容在壁纸下方
+ * 覆盖模式：壁纸固定为背景（始终显示），主内容 absolute 覆盖其上并滚动
  * ============================================ */
 #wallpaper-wrapper.wallpaper-fullscreen {
-    position: relative !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     height: 100vh !important;
     min-height: 100vh !important;
     max-height: 100vh !important;
-    top: 0 !important;
     transform: none !important;
     overflow: hidden !important;
     opacity: 1 !important;
@@ -809,13 +811,42 @@ html:not([data-wallpaper-mode="overlay"]):not([data-wallpaper-mode="none"]):not(
     scroll-margin-top: 5.5rem;
 }
 
-/* Fullscreen 模式下主内容在壁纸下方，用 relative 定位紧跟壁纸 */
+/* Fullscreen 覆盖模式：主内容 relative 从导航栏下方开始（margin-top 由 JS 设置），壁纸 fixed 背景 */
 html[data-wallpaper-mode="fullscreen"] .w-full.z-30.pointer-events-none {
     top: 0 !important;
 }
 
 /* 初始加载时隐藏主内容，防止壁纸初始化前内容闪烁 */
 html[data-wallpaper-mode="fullscreen"] body:not(.wallpaper-initialized) .w-full.z-30.pointer-events-none {
+    visibility: hidden;
+}
+
+/* 主页覆盖模式：初始只显示壁纸与向下箭头并锁定滚动，点击箭头后内容淡入覆盖、恢复滚动 */
+body.is-home:not(.overlay-shown) {
+    overflow: hidden;
+}
+body.is-home .w-full.z-30.pointer-events-none {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+body.is-home.overlay-shown .w-full.z-30.pointer-events-none {
+    opacity: 1;
+    pointer-events: auto;
+}
+/* 主页初始（内容隐藏）时，内容区内部 pointer-events-auto 的元素也必须穿透，
+   否则会拦截壁纸/向下箭头的点击（内容区外层 none 会被内部 auto 覆盖） */
+body.is-home:not(.overlay-shown) .w-full.z-30.pointer-events-none * {
+    pointer-events: none !important;
+}
+/* 内容覆盖显示后：隐藏壁纸上的标题/名言文字与向下箭头（背景仅保留动态壁纸） */
+body.is-home.overlay-shown #banner-overlay-container,
+body.is-home.overlay-shown #scroll-down-indicator {
+    visibility: hidden;
+}
+/* 其他页面：内容直接覆盖壁纸，同样隐藏壁纸文字（页面标题等）与向下箭头 */
+body:not(.is-home) #banner-overlay-container,
+body:not(.is-home) #scroll-down-indicator {
     visibility: hidden;
 }
 

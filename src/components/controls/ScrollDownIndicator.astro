@@ -5,7 +5,7 @@ import { Icon } from "astro-icon/components";
 <div
   id="scroll-down-indicator"
   class="scroll-down-indicator"
-  onclick="document.getElementById('main-grid')?.scrollIntoView({ behavior: 'smooth' })"
+  onclick="window.handleScrollDownClick && window.handleScrollDownClick()"
 >
   <Icon is:inline name="material-symbols:keyboard-arrow-down-rounded" class="scroll-down-icon" />
 </div>
@@ -15,6 +15,18 @@ import { Icon } from "astro-icon/components";
     // 防止重复初始化（Swup 页面切换时可能重复执行）
     if (window.__scrollDownIndicatorInit) return;
     window.__scrollDownIndicatorInit = true;
+
+    // 点击箭头：主页 → 内容覆盖层淡入（覆盖动态壁纸）；其他页 → 滚动到内容
+    window.handleScrollDownClick = function () {
+      var isHome = document.body.classList.contains("is-home");
+      if (isHome) {
+        document.body.classList.add("overlay-shown");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        var grid = document.getElementById("main-grid");
+        if (grid) grid.scrollIntoView({ behavior: "smooth" });
+      }
+    };
 
     function updateVisibility() {
       var indicator = document.getElementById("scroll-down-indicator");
@@ -29,5 +41,12 @@ import { Icon } from "astro-icon/components";
 
     window.addEventListener("scroll", updateVisibility, { passive: true });
     updateVisibility();
+
+    // Swup 导航回主页时重置为"仅壁纸"状态（内容覆盖层重新隐藏，需再次点击箭头）
+    document.addEventListener("swup:contentReplaced", function () {
+      if (document.body.classList.contains("is-home")) {
+        document.body.classList.remove("overlay-shown");
+      }
+    });
   })();
 </script>

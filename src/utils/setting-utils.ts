@@ -730,7 +730,7 @@ function adjustMainContentPosition(
 			break;
 		}
 		case "fullscreen": {
-			// 全屏壁纸模式：壁纸已在文档流中占100vh，主内容紧跟其后
+			// 覆盖模式：壁纸 fixed 固定为背景，主内容 relative 从导航栏下方开始（文档流撑起页面高度，可滚动）
 			const isFullscreenMobile = window.innerWidth < 1024;
 			const isFullscreenHome = checkIsHomePage(window.location.pathname);
 			if (isFullscreenMobile && !isFullscreenHome) {
@@ -745,39 +745,14 @@ function adjustMainContentPosition(
 				break;
 			}
 
-			if (animate) {
-				// 运行时切换：从当前位置动画滑到壁纸下方，完成后切换为 relative
-				const computedTop = mainContent.getBoundingClientRect().top;
-				mainContent.style.transition = "none";
-				mainContent.style.position = "absolute";
-				mainContent.style.zIndex = "30";
-				mainContent.style.setProperty("top", `${computedTop}px`, "important");
-				// absolute 定位下 margin-top 不影响布局，提前设好最终值避免切换 relative 时跳变
-				mainContent.style.setProperty("margin-top", "1rem", "important");
-				mainContent.classList.add("no-banner-layout");
-				void mainContent.offsetWidth;
-				mainContent.style.setProperty(
-					"transition",
-					"top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-					"important",
-				);
-				mainContent.style.setProperty("top", "100vh", "important");
-				fullscreenAnimationTimeout = setTimeout(() => {
-					mainContent.style.transition = "none";
-					mainContent.style.position = "relative";
-					mainContent.style.setProperty("top", "0", "important");
-					void mainContent.offsetWidth;
-					mainContent.style.transition = "";
-				}, 450);
-			} else {
-				// 初始化：直接设置位置，无需动画
-				mainContent.classList.add("no-banner-layout");
-				mainContent.style.position = "relative";
-				mainContent.style.zIndex = "30";
-				mainContent.style.setProperty("top", "0", "important");
-				mainContent.style.setProperty("margin-top", "1rem", "important");
-				mainContent.style.transition = "";
-			}
+			// 运行时切换与初始化统一：壁纸为固定背景，主内容 relative 定位（margin-top 5.5rem 从导航栏下方开始）
+			mainContent.classList.add("no-banner-layout");
+			mainContent.style.position = "relative";
+			mainContent.style.zIndex = "30";
+			mainContent.style.setProperty("top", "0", "important");
+			mainContent.style.setProperty("margin-top", "5.5rem", "important");
+			mainContent.style.minHeight = "";
+			mainContent.style.transition = "";
 			break;
 		}
 		case "overlay":
